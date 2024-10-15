@@ -1,0 +1,37 @@
+Original dataset class distribution:
+class_label
+2    71
+1    59
+3    48
+Name: count, dtype: int64
+
+New dataset class distribution:
+class_label
+2    71
+1    59
+Name: count, dtype: int64
+
+Original dataset shape: (178, 14)
+New dataset shape: (130, 14)
+Training set shape: (91, 13)
+Test set shape: (39, 13)
+Learned weights are [[  -267.89840694]
+ [ -2545.79491211]
+ [    24.81899178]
+ [  -474.0584822 ]
+ [ -7208.80410822]
+ [-12929.58912405]
+ [  -320.81021126]
+ [    13.20176239]
+ [  -137.70433281]
+ [  -185.35782365]
+ [   252.95925875]
+ [  -310.58663126]
+ [  -423.58290363]
+ [   911.18203156]]
+Traceback (most recent call last):
+  File "./test.py", line 196, in <module>
+    model.evaluate(X_test,y_test)
+  File "./test.py", line 138, in evaluate
+    precision = TP / (TP + FP)
+ZeroDivisionError: division by zero

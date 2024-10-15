@@ -1,0 +1,32 @@
+Original dataset class distribution:
+class_label
+2    71
+1    59
+3    48
+Name: count, dtype: int64
+
+New dataset class distribution:
+class_label
+2    71
+1    59
+Name: count, dtype: int64
+
+Original dataset shape: (178, 14)
+New dataset shape: (130, 14)
+Training set shape: (91, 13)
+Test set shape: (39, 13)
+Learned weights are [[-2.52809995e+02]
+ [-2.38691074e+03]
+ [-3.48405180e+01]
+ [-4.38203096e+02]
+ [-6.83196389e+03]
+ [-1.23996254e+04]
+ [-3.28995776e+02]
+ [-4.31684896e+00]
+ [-1.26975970e+02]
+ [-1.54147902e+02]
+ [ 2.71449604e+02]
+ [-2.90474468e+02]
+ [-4.00623601e+02]
+ [ 2.84325259e+03]]
+evaluation results: accuracy: 0.717948717948718, recall: 1.0, precision: 0.6451612903225806, F1: 0.7843137254901961

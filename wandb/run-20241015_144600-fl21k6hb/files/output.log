@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "./HA-03&04_Classification_and_Logistic_Regression/test.py", line 21, in <module>
+    wine_data = pd.read_csv(file_name, header=None, names=column_names)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/pandas/io/parsers/readers.py", line 912, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/pandas/io/parsers/readers.py", line 577, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/pandas/io/parsers/readers.py", line 1407, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/pandas/io/parsers/readers.py", line 1661, in _make_engine
+    self.handles = get_handle(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/pandas/io/common.py", line 859, in get_handle
+    handle = open(
+FileNotFoundError: [Errno 2] No such file or directory: 'wine.data'

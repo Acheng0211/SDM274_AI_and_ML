@@ -1,0 +1,18 @@
+{"time":"2024-10-15T14:50:12.522132046+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-15T14:50:12.522140102+08:00","level":"INFO","msg":"created symlink","path":"/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_145012-fnm6ecps/logs/debug-core.log"}
+{"time":"2024-10-15T14:50:12.529973583+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-15T14:50:12.534556529+08:00","level":"INFO","msg":"created new stream","id":"fnm6ecps"}
+{"time":"2024-10-15T14:50:12.534581166+08:00","level":"INFO","msg":"stream: started","id":"fnm6ecps"}
+{"time":"2024-10-15T14:50:12.534606182+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:12.534659038+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:12.53468293+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:12.889740971+08:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-15T14:50:12.890127951+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-15T14:50:12.984447501+08:00","level":"INFO","msg":"stream: closing","id":"fnm6ecps"}
+{"time":"2024-10-15T14:50:12.984468499+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-15T14:50:12.985778492+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-15T14:50:14.808335299+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-10-15T14:50:15.151914704+08:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:15.151970774+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:15.151976889+08:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"fnm6ecps"}}
+{"time":"2024-10-15T14:50:15.152137291+08:00","level":"INFO","msg":"stream: closed","id":"fnm6ecps"}

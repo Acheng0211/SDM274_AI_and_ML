@@ -1,0 +1,382 @@
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_133500-ym1czsm6/logs/debug.log
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_133500-ym1czsm6/logs/debug-internal.log
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 13:35:00,050 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 13:35:00,051 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 13:35:00,051 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 13:35:00,052 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 13:35:00,053 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 13:35:00,064 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 13:35:00,605 INFO    MainThread:178097 [wandb_init.py:init():863] starting run threads in backend
+2024-10-15 13:35:04,990 INFO    Thread-4  :178097 [retry.py:__call__():172] Retry attempt failed:
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 199, in _new_conn
+    sock = connection.create_connection(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+socket.timeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 490, in _make_request
+    raise new_e
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 466, in _make_request
+    self._validate_conn(conn)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1095, in _validate_conn
+    conn.connect()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 693, in connect
+    self.sock = sock = self._new_conn()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 208, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f3007f952b0>, 'Connection to api.wandb.ai timed out. (connect timeout=20)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3007f952b0>, 'Connection to api.wandb.ai timed out. (connect timeout=20)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/retry.py", line 131, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 347, in execute
+    return self.client.execute(*args, **kwargs)  # type: ignore
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/gql_request.py", line 58, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/adapters.py", line 688, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3007f952b0>, 'Connection to api.wandb.ai timed out. (connect timeout=20)'))
+2024-10-15 13:35:30,697 INFO    MainThread:178097 [wandb_run.py:_console_start():2465] atexit reg
+2024-10-15 13:35:30,697 INFO    MainThread:178097 [wandb_run.py:_redirect():2313] redirect: wrap_raw
+2024-10-15 13:35:30,698 INFO    MainThread:178097 [wandb_run.py:_redirect():2378] Wrapping output streams.
+2024-10-15 13:35:30,698 INFO    MainThread:178097 [wandb_run.py:_redirect():2403] Redirects installed.
+2024-10-15 13:35:30,699 INFO    MainThread:178097 [wandb_init.py:init():907] run started, returning control to user process
+2024-10-15 13:39:41,647 INFO    Thread-4  :178097 [retry.py:__call__():172] Retry attempt failed:
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 199, in _new_conn
+    sock = connection.create_connection(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/connection.py", line 85, in create_connection
+    raise err
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/connection.py", line 73, in create_connection
+    sock.connect(sa)
+socket.timeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 789, in urlopen
+    response = self._make_request(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 490, in _make_request
+    raise new_e
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 466, in _make_request
+    self._validate_conn(conn)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1095, in _validate_conn
+    conn.connect()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 693, in connect
+    self.sock = sock = self._new_conn()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connection.py", line 208, in _new_conn
+    raise ConnectTimeoutError(
+urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPSConnection object at 0x7f3005600f40>, 'Connection to api.wandb.ai timed out. (connect timeout=20)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/adapters.py", line 667, in send
+    resp = conn.urlopen(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/connectionpool.py", line 843, in urlopen
+    retries = retries.increment(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/urllib3/util/retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3005600f40>, 'Connection to api.wandb.ai timed out. (connect timeout=20)'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/retry.py", line 131, in __call__
+    result = self._call_fn(*args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/internal/internal_api.py", line 347, in execute
+    return self.client.execute(*args, **kwargs)  # type: ignore
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 52, in execute
+    result = self._get_result(document, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/vendor/gql-0.2.0/wandb_gql/client.py", line 60, in _get_result
+    return self.transport.execute(document, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/gql_request.py", line 58, in execute
+    request = self.session.post(self.url, **post_args)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 637, in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/requests/adapters.py", line 688, in send
+    raise ConnectTimeout(e, request=request)
+requests.exceptions.ConnectTimeout: HTTPSConnectionPool(host='api.wandb.ai', port=443): Max retries exceeded with url: /graphql (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f3005600f40>, 'Connection to api.wandb.ai timed out. (connect timeout=20)'))
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_134400-6zfibpsh/logs/debug.log
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_134400-6zfibpsh/logs/debug-internal.log
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 13:44:00,727 INFO    MainThread:178097 [wandb_init.py:init():642] re-initializing run, found existing run on stack: ym1czsm6
+2024-10-15 13:44:00,728 INFO    MainThread:178097 [wandb_run.py:_finish():2164] finishing run hgj030211-southern-university-of-science-technology/perceptron/ym1czsm6
+2024-10-15 13:44:00,728 INFO    MainThread:178097 [wandb_run.py:_atexit_cleanup():2428] got exitcode: 0
+2024-10-15 13:44:00,728 INFO    MainThread:178097 [wandb_run.py:_restore():2410] restore
+2024-10-15 13:44:00,729 INFO    MainThread:178097 [wandb_run.py:_restore():2416] restore done
+2024-10-15 14:07:21,658 WARNING MainThread:178097 [wandb_init.py:init():1256] interrupted
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 652, in init
+    latest_run.finish()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 452, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 393, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 2157, in finish
+    return self._finish(exit_code, quiet)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 2191, in _finish
+    self._atexit_cleanup(exit_code=exit_code)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 2440, in _atexit_cleanup
+    self._on_finish()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_run.py", line 2682, in _on_finish
+    _ = exit_handle.wait(timeout=-1, on_progress=self._on_progress_exit)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2024-10-15 14:16:28,676 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:16:28,680 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:16:28,682 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 14:16:28,682 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_141628-61vehl0h/logs/debug.log
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_141628-61vehl0h/logs/debug-internal.log
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 14:16:28,683 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 14:16:28,684 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 14:16:28,684 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 14:16:28,687 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 14:16:28,687 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 14:16:28,698 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 14:17:58,715 ERROR   MainThread:178097 [wandb_init.py:init():838] encountered error: Run initialization has timed out after 90.0 sec. 
+Please refer to the documentation for additional information: https://docs.wandb.ai/guides/track/tracking-faq#initstarterror-error-communicating-with-wandb-process-
+2024-10-15 14:17:58,715 ERROR   MainThread:178097 [wandb_init.py:init():1262] error in wandb.init()
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 844, in init
+    raise error
+wandb.errors.errors.CommError: Run initialization has timed out after 90.0 sec. 
+Please refer to the documentation for additional information: https://docs.wandb.ai/guides/track/tracking-faq#initstarterror-error-communicating-with-wandb-process-
+2024-10-15 14:20:54,333 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:20:54,337 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_142054-itjl729z/logs/debug.log
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_142054-itjl729z/logs/debug-internal.log
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 14:20:54,340 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 14:20:54,341 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 14:20:54,341 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 14:20:54,343 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 14:20:54,343 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 14:20:54,353 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 14:21:04,683 WARNING MainThread:178097 [wandb_init.py:init():1256] interrupted
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 815, in init
+    result = run_init_handle.wait(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2024-10-15 14:21:09,507 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_142109-7aira1p3/logs/debug.log
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_142109-7aira1p3/logs/debug-internal.log
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 14:21:09,510 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 14:21:09,511 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 14:21:09,511 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 14:21:09,513 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 14:21:09,513 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 14:21:09,522 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 14:42:49,275 WARNING MainThread:178097 [wandb_init.py:init():1256] interrupted
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 815, in init
+    result = run_init_handle.wait(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2024-10-15 14:43:07,759 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_144307-o80u6nfl/logs/debug.log
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_144307-o80u6nfl/logs/debug-internal.log
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 14:43:07,762 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 14:43:07,763 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 14:43:07,763 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 14:43:07,763 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 14:43:07,764 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 14:43:07,766 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 14:43:07,766 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 14:43:07,775 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 14:43:08,071 WARNING MsgRouterThr:178097 [router.py:message_loop():77] message_loop has been closed
+2024-10-15 14:43:08,072 WARNING MsgRouterThr:178097 [router.py:message_loop():77] message_loop has been closed
+2024-10-15 14:43:08,072 WARNING MsgRouterThr:178097 [router.py:message_loop():77] message_loop has been closed
+2024-10-15 14:44:20,557 WARNING MainThread:178097 [wandb_init.py:init():1256] interrupted
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 815, in init
+    result = run_init_handle.wait(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt
+2024-10-15 16:06:15,697 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 16:06:15,702 INFO    MainThread:178097 [wandb_settings.py:_apply_login():1970] Applying login settings: {}
+2024-10-15 16:06:15,705 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Current SDK version is 0.18.3
+2024-10-15 16:06:15,705 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Configure stats pid to 178097
+2024-10-15 16:06:15,705 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/.config/wandb/settings
+2024-10-15 16:06:15,705 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/settings
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Loading settings from environment variables: {}
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Inferring run settings from compute environment: {'program': '<python with no main file>'}
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_setup.py:_flush():79] Applying login settings: {}
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:_log_setup():532] Logging user logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_160615-bl9ofkjy/logs/debug.log
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:_log_setup():533] Logging internal logs to /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_160615-bl9ofkjy/logs/debug-internal.log
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:init():617] calling init triggers
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:init():624] wandb.init called with sweep_config: {}
+config: {}
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:init():667] starting backend
+2024-10-15 16:06:15,706 INFO    MainThread:178097 [wandb_init.py:init():671] sending inform_init request
+2024-10-15 16:06:15,707 INFO    MainThread:178097 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-15 16:06:15,707 INFO    MainThread:178097 [wandb_init.py:init():684] backend started and connected
+2024-10-15 16:06:15,709 INFO    MainThread:178097 [wandb_run.py:_label_probe_notebook():1346] probe notebook
+2024-10-15 16:06:15,709 INFO    MainThread:178097 [wandb_init.py:init():779] updated telemetry
+2024-10-15 16:06:15,720 INFO    MainThread:178097 [wandb_init.py:init():812] communicating run to backend with 90.0 second timeout
+2024-10-15 16:06:29,868 WARNING MainThread:178097 [wandb_init.py:init():1256] interrupted
+Traceback (most recent call last):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 1252, in init
+    return wi.init()
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/wandb_init.py", line 815, in init
+    result = run_init_handle.wait(
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 283, in wait
+    found, abandoned = self._slot._get_and_clear(timeout=wait_timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 130, in _get_and_clear
+    if self._wait(timeout=timeout):
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/site-packages/wandb/sdk/lib/mailbox.py", line 126, in _wait
+    return self._event.wait(timeout=timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 558, in wait
+    signaled = self._cond.wait(timeout)
+  File "/home/hgj/anaconda3/envs/sdm274/lib/python3.8/threading.py", line 306, in wait
+    gotit = waiter.acquire(True, timeout)
+KeyboardInterrupt

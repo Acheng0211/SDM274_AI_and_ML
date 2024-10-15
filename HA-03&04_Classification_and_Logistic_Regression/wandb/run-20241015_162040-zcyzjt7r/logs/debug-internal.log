@@ -1,0 +1,9 @@
+{"time":"2024-10-15T16:20:40.655014527+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-15T16:20:40.655022492+08:00","level":"INFO","msg":"created symlink","path":"/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_162040-zcyzjt7r/logs/debug-core.log"}
+{"time":"2024-10-15T16:20:40.656978143+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-15T16:20:40.659638143+08:00","level":"INFO","msg":"created new stream","id":"zcyzjt7r"}
+{"time":"2024-10-15T16:20:40.659651375+08:00","level":"INFO","msg":"stream: started","id":"zcyzjt7r"}
+{"time":"2024-10-15T16:20:40.659668979+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"zcyzjt7r"}}
+{"time":"2024-10-15T16:20:40.659664851+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"zcyzjt7r"}}
+{"time":"2024-10-15T16:20:40.659661434+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"zcyzjt7r"}}
+{"time":"2024-10-15T16:21:07.947952134+08:00","level":"INFO","msg":"stream: closing","id":"zcyzjt7r"}

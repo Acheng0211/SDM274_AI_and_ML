@@ -1,0 +1,18 @@
+{"time":"2024-10-15T15:19:33.819349599+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-15T15:19:33.819357035+08:00","level":"INFO","msg":"created symlink","path":"/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241015_151933-ws9snpjh/logs/debug-core.log"}
+{"time":"2024-10-15T15:19:33.896821442+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-15T15:19:33.90369524+08:00","level":"INFO","msg":"created new stream","id":"ws9snpjh"}
+{"time":"2024-10-15T15:19:33.903728895+08:00","level":"INFO","msg":"stream: started","id":"ws9snpjh"}
+{"time":"2024-10-15T15:19:33.903782699+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:33.903845099+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:33.903831676+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:34.326074713+08:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-15T15:19:34.327338505+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-15T15:19:35.027299855+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-15T15:19:35.028162447+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-15T15:19:36.315931091+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-10-15T15:19:38.583277107+08:00","level":"INFO","msg":"stream: closing","id":"ws9snpjh"}
+{"time":"2024-10-15T15:19:38.583318674+08:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:38.58334945+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:38.583398489+08:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"ws9snpjh"}}
+{"time":"2024-10-15T15:19:38.583420726+08:00","level":"INFO","msg":"stream: closed","id":"ws9snpjh"}

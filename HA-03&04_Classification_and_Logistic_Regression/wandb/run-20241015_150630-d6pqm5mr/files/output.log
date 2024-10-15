@@ -1,0 +1,18 @@
+Original dataset class distribution:
+class_label
+2    71
+1    59
+3    48
+Name: count, dtype: int64
+
+New dataset class distribution:
+class_label
+2    71
+1    59
+Name: count, dtype: int64
+
+Original dataset shape: (178, 14)
+New dataset shape: (130, 14)
+Training set shape: (91, 13)
+Test set shape: (39, 13)
+evaluation results: accuracy: 0.8205128205128205, recall: 0.65, precision: 1.0, F1: 0.787878787878788
