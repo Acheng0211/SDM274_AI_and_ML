@@ -118,7 +118,7 @@ class LogisticRegression:
     
     def _loss(self, y, y_pred):
         epsilon = 1e-5
-        loss = -np.mean(y * np.log(y_pred + epsilon) + (1 - y) * np.log(1-y_pred+epl))
+        loss = -np.mean(y * np.log(y_pred + epsilon) + (1 - y) * np.log(1-y_pred+epsilon))
 
     def _gradient(self, X, y_pred, y):
         return -(y - y_pred) @ X / y.size
