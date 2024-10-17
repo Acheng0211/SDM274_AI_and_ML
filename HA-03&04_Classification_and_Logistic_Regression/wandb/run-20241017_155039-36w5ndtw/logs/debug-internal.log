@@ -1,0 +1,23 @@
+{"time":"2024-10-17T15:50:39.733425485+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-17T15:50:39.733458187+08:00","level":"INFO","msg":"created symlink","path":"/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241017_155039-36w5ndtw/logs/debug-core.log"}
+{"time":"2024-10-17T15:50:41.742833809+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-17T15:50:41.747345239+08:00","level":"INFO","msg":"created new stream","id":"36w5ndtw"}
+{"time":"2024-10-17T15:50:41.747366908+08:00","level":"INFO","msg":"stream: started","id":"36w5ndtw"}
+{"time":"2024-10-17T15:50:41.747403831+08:00","level":"INFO","msg":"stream: closing","id":"36w5ndtw"}
+{"time":"2024-10-17T15:50:41.747372859+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:50:41.747380673+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:50:41.747400814+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:50:41.748462481+08:00","level":"ERROR","msg":"sender: upsertConfig: RunRecord is nil"}
+{"time":"2024-10-17T15:50:41.748521291+08:00","level":"WARN","msg":"No requirements.txt found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job"}
+{"time":"2024-10-17T15:50:41.748525018+08:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-10-17T15:51:11.799923343+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-10-17T15:51:44.265522271+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded"}
+{"time":"2024-10-17T15:52:19.141179514+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-10-17T15:52:57.662408424+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)"}
+{"time":"2024-10-17T15:53:15.083801188+08:00","level":"ERROR","msg":"HTTP error","status":404,"method":"POST","url":"https://api.wandb.ai/graphql"}
+{"time":"2024-10-17T15:53:15.083837494+08:00","level":"ERROR","msg":"runfiles: CreateRunFiles returned error: returned error 404 Not Found: {\"errors\":[{\"message\":\"project /hw3 not found during createRunFiles\",\"path\":[\"createRunFiles\"]}],\"data\":{\"createRunFiles\":null}}"}
+{"time":"2024-10-17T15:53:15.08406343+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-10-17T15:53:15.084126345+08:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:53:15.084141978+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:53:15.084160304+08:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"36w5ndtw"}}
+{"time":"2024-10-17T15:53:15.084189118+08:00","level":"INFO","msg":"stream: closed","id":"36w5ndtw"}

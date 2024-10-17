@@ -1,0 +1,12 @@
+{"time":"2024-10-17T17:30:09.19565743+08:00","level":"INFO","msg":"using version","core version":"0.18.3"}
+{"time":"2024-10-17T17:30:09.195666093+08:00","level":"INFO","msg":"created symlink","path":"/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/wandb/run-20241017_173009-08jw9pkz/logs/debug-core.log"}
+{"time":"2024-10-17T17:30:11.19628498+08:00","level":"ERROR","msg":"dialing: google: could not find default credentials. See https://cloud.google.com/docs/authentication/external/set-up-adc for more information"}
+{"time":"2024-10-17T17:30:11.199469754+08:00","level":"INFO","msg":"created new stream","id":"08jw9pkz"}
+{"time":"2024-10-17T17:30:11.199489537+08:00","level":"INFO","msg":"stream: started","id":"08jw9pkz"}
+{"time":"2024-10-17T17:30:11.199508981+08:00","level":"INFO","msg":"handler: started","stream_id":{"value":"08jw9pkz"}}
+{"time":"2024-10-17T17:30:11.19950657+08:00","level":"INFO","msg":"sender: started","stream_id":{"value":"08jw9pkz"}}
+{"time":"2024-10-17T17:30:11.199542019+08:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"08jw9pkz"}}
+{"time":"2024-10-17T17:30:11.287554927+08:00","level":"INFO","msg":"stream: closing","id":"08jw9pkz"}
+{"time":"2024-10-17T17:30:11.288017428+08:00","level":"ERROR","msg":"sender: upsertConfig: RunRecord is nil"}
+{"time":"2024-10-17T17:30:11.288075175+08:00","level":"WARN","msg":"No requirements.txt found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job"}
+{"time":"2024-10-17T17:30:11.288080649+08:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
