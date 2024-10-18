@@ -162,15 +162,6 @@ class LogisticRegression:
             self.W -= self.lr * grad 
             # print(f"current epoch: {epoch}")
 
-    def mean_normalization(self, X):
-        X_mean, X_std = X.mean(axis=0), np.std(X, axis=0)
-        return (X - X_mean) / X_std
-    
-    def min_max_normalization(self, X):
-        params = (X.min(axis=0), X.max(axis=0))
-        X_min, X_max = params
-        return (X - X_min) / (X_max - X_min)
-
     def _predict(self, X): 
         # return np.sign(X @ self.W)
         X = self._preprocess_data(X)
@@ -197,6 +188,14 @@ class LogisticRegression:
         F1 = 2 * precision * recall / (precision + recall)
         print(f"evaluation results:\n    accuracy: {accuracy}, \n    recall: {recall}, \n    precision: {precision}, \n    F1: {F1}")
     
+    def plot_loss(self, loss):
+        plt.plot(loss)
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.title('Logistic_SGD_loss')
+        plt.show()
+        plt.savefig('Logistic_SGD_loss.png', )
+
     def plot(self, data_filtered, X, y): #todo: complete this function
         df = pd.DataFrame(data_filtered)
         color = []
