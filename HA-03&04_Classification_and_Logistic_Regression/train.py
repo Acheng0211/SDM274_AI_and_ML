@@ -36,7 +36,7 @@ def main(cfg: DictConfig):
     # Fit and evaluate
     model.fit(X_train, y_train)
     model.evaluate(X_test, y_test)
-    model.plot_loss(model.loss)
+    model.plot_loss(model.loss, cfg.name)
     wandb.finish()
 
 if __name__ == "__main__":

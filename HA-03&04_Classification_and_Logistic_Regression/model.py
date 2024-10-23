@@ -111,14 +111,14 @@ class LogisticRegression:
     def _linear_tf(self, X):
         return X @ self.W
     
-    def _sigmoid(self, z): #todo: fix exp overflow
+    def _sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
     
     def _predict_probablity(self, X): 
         z = self._linear_tf(X)
         prob = self._sigmoid(z)
         data = np.concatenate((z, prob), axis=1)
-        np.savetxt("compare.csv", data, delimiter=", ")
+        # np.savetxt("compare.csv", data, delimiter=", ")
         return prob
     
     def _loss(self, y, y_pred):
@@ -136,7 +136,7 @@ class LogisticRegression:
         X_[:, 1:] = X
         return X_
     
-    def fit(self, X, y): #todo: fix loss break too early
+    def fit(self, X, y): 
         if self.tol is not None:
             loss_old = np.inf
 
@@ -145,10 +145,12 @@ class LogisticRegression:
             y_pred = self._predict_probablity(X)
             loss = self._loss(y, y_pred)
             self.loss.append(loss)
+            loss_error = np.abs(loss_old - loss)
             if self.wandb:
                 wandb.log({"loss": loss})
             if self.tol is not None:
-                if np.abs(loss_old - loss) < self.tol:
+                if  loss_error < self.tol:
+                    print(f'loss error is {loss_error}, smaller than tolerance, quit at epoch {epoch}')
                     break
                 loss_old = loss
             
@@ -160,10 +162,8 @@ class LogisticRegression:
                 idx = np.random.choice(y.shape[0], batch_size, replace=False)
                 grad = self._gradient(X[idx], y[idx], y_pred[idx]) 
             self.W -= self.lr * grad 
-            # print(f"current epoch: {epoch}")
 
     def _predict(self, X): 
-        # return np.sign(X @ self.W)
         X = self._preprocess_data(X)
         y_pred = self._predict_probablity(X)
         return np.where(y_pred>=0.5,1,0)
@@ -188,25 +188,10 @@ class LogisticRegression:
         F1 = 2 * precision * recall / (precision + recall)
         print(f"evaluation results:\n    accuracy: {accuracy}, \n    recall: {recall}, \n    precision: {precision}, \n    F1: {F1}")
     
-    def plot_loss(self, loss):
+    def plot_loss(self, loss, name):
         plt.plot(loss)
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
-        plt.title('Logistic_SGD_loss')
+        plt.title(f'{name}_{self.gd}_loss')
         plt.show()
-        plt.savefig('Logistic_SGD_loss.png', )
-
-    def plot(self, data_filtered, X, y): #todo: complete this function
-        df = pd.DataFrame(data_filtered)
-        color = []
-        for i in df['class_label']:
-            if i == 1:
-                color.append('red')
-            else:
-                color.append('blue')
-        x_values = np.linspace(X[:, 0].min(), X[:, 0].max(), num=100)
-        y_values = - self.W * x_values        
-        plt.scatter(self._linear_tf(X), y, color=color, label='Test data')
-        plt.plot(x_values, y_values, label='Decision Boundary')
-        plt.legend()
-        plt.show()
+        plt.savefig(f'{name}_{self.gd}_loss.png',)

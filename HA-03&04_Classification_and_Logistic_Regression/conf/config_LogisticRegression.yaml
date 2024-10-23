@@ -1,11 +1,11 @@
 name: "LogisticRegression"
 # dataset_path: "./data/wine.data"
-dataset_path: "./HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #debug
+dataset_path: "/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #debug
 wandb_on_off: false         
-lr: 1e-3
-epoch: 9000
-tol: 0
-gd: "SGD"   # available: "SGD" "MBGD"
+lr: 1e-5
+epoch: 10000
+tol: 1e-5
+gd: "MBGD"   # available: "SGD" "MBGD"
 
 wandb:
   project: "Logistic Regression"

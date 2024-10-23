@@ -1,5 +1,6 @@
 name: "Perceptron"
-dataset_path: "./data/wine.data"
+# dataset_path: "./data/wine.data"
+dataset_path: "/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #debug
 wandb_on_off: true          
 lr: 0.01
 epoch: 9000
