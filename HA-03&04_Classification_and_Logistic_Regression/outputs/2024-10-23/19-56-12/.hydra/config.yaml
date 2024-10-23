@@ -1,9 +1,0 @@
-name: LogisticRegression
-dataset_path: /home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data
-wandb_on_off: false
-lr: 1.0e-05
-epoch: 10000
-tol: 1.0e-05
-gd: MBGD
-wandb:
-  project: Logistic Regression
