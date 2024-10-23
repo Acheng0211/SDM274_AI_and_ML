@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import wandb
 import pandas as pd
@@ -193,5 +194,5 @@ class LogisticRegression:
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.title(f'{name}_{self.gd}_loss')
+        plt.savefig(os.path.join('./output', f'{name}_{self.gd}_loss.png'))
         plt.show()
-        plt.savefig(f'{name}_{self.gd}_loss.png',)

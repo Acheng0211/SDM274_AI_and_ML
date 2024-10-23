@@ -1,7 +1,7 @@
 name: "LogisticRegression"
 # dataset_path: "./data/wine.data"
 dataset_path: "/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #debug
-wandb_on_off: false         
+wandb_on_off: false        
 lr: 1e-5
 epoch: 10000
 tol: 1e-5
