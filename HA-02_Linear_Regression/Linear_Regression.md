@@ -1,30 +1,35 @@
-# Linear Regression
+# Linear Regression 
+<div style="text-align: right">noted by Acheng0211(Guojing Huang, SUSTech)</div> 
 
-- [What is Regression?](#1)
-- [Linear Regression model](#2)
-- [Loss Function](#3)
-- [Optimization](#4)
-    - [Least square solution](#4.1)
-    - [Gradient decent](#4.2)
-- [Generalization](#5)
-- [Regularization](#6)
-- [Normalization](#7)
-  - [Min-Max normalization](#7.1)
-  - [Mean normalization](#7.2)
-- [Summary](#sum)
+- [What is Regression?](#1-what-is-regression)
+- [Linear Regression model](#2-linear-regression-model)
+- [Loss Function](#3-loss-function)
+- [Optimization](#4-optimization)
+    - [Least square solution](#41-least-square-solution)
+    - [Gradient decent](#42-gradient-decent)
+- [Generalization](#5-generalization)
+- [Regularization](#6-regularization)
+- [Normalization](#7-normalization)
+  - [Min-Max normalization](#71-min-max-normalization)
+  - [Mean normalization](#72-mean-normalization)
+- [Summary](#summary)
 ___
 
 
-### **1.** <big>What is Regression?</big>{#1}
+### **1.** <big>What is Regression?</big>
 
 Regression is relative to Classification, depending on the predicted variable **_y_pred_**. Normally, we need classification for typed outputs and regression for continuous outputs. However, somehow classification problem can be converted to regression problem.
 
-### **2.** <big>Linear Regression model</big>{#2}
+[back to the top](#linear-regression)
+
+### **2.** <big>Linear Regression model</big>
 
 - True model(unknown) : $t = f(x)$
 - Linear Regression model: $y(x) = w_0 + w_1x$
 
-### **3.** <big>Loss Function</big>{#3}
+[back to the top](#linear-regression)
+
+### **3.** <big>Loss Function</big>
 Standard <font color="red">loss/cost/objective</font> function measures the <font color="red">error</font> between _y_ and the true value _t_.
 
 - Sum of Squares for Error (SSE) $= \displaystyle \sum^{N}_{n=1} (t^{(n)} - y^{(n)})^2$
@@ -34,17 +39,18 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 - Mean Absolute Error (MAE) $= \frac{1}{N} \displaystyle \sum^{N}_{n=1} |{t^{(n)} - y^{(n)}}|$
 - Relative Absolute Error (RAE) $= \frac{\displaystyle \sum^{N}_{n=1} |t^{(n)} - y^{(n)}|}{\displaystyle \sum^{N}_{n=1} |t^{(n)} - \overline{t}|}, \overline{t} = \frac{1}{N} \displaystyle \sum^{N}_{n=1} t^{(n)} $
 
+[back to the top](#linear-regression)
 
-### **4.** <big>Optimization</big>{#4}
+### **4.** <big>Optimization</big>
 - Preprocess: incorporate the bias $w_0$ into **w** by using $x_0=1$ (Add an **1** to input **x**) . Then, **x** = $\left[\begin{matrix}1 \\ x \end{matrix} \right]$
 - Linear regression model: $y(x) = w^T\mathbf{x}$
 - MSE loss: $l(w) = \frac{1}{2N} \displaystyle \sum^{N}_{n=1} [t^{(n)} - y({x^{(n)}})]^2$, convex
 
-    ####  Least square solution{#4.1}
+    ####  4.1 Least square solution
     1. let the gredient equal to 0, to find the minima: $\nabla l(w) = -\frac{1}{N} \displaystyle \sum^{N}_{n=1} (t^{(n)} - w^T\mathbf{x}{(n)})\mathbf{x}^{(n)}$ = 0
     2. then we get: $w = (\mathbf{x}^{T}\mathbf{x})^{-1}\mathbf{x}^{T}t$
 
-    #### Gradient decent{#4.2}
+    #### 4.2 Gradient decent
     - let gradient decrease to the smallest through iteration: Initalize at one point, calculate its gradient and move in the opposite direction. 
 
     - Protocol:
@@ -71,25 +77,31 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 |Performs well even with a large number of $d$ features|large computation complexity $O(d^3)$, acceptable when $d < 10000$|
 |Suitable for various types of models|Only suitable for linear models|
 
-### **5.** <big>Generalization</big>{#5}
+[back to the top](#linear-regression)
+
+### **5.** <big>Generalization</big>
 -  **Generalization** = model's ability to predict the held out data
 
-### **6.** <big>Regularization</big>{#6}
+[back to the top](#linear-regression)
+
+### **6.** <big>Regularization</big>
 - One way of dealing with overifitting is to encourage the weights to be small
 - Standard regularization approach:
     $l(w) = \displaystyle \sum^{N}_{n=1}[t^{(n)} - y({x^{(n)},w})]^2 + \alpha w^{T}w$, $\alpha$ is a hyper-parameter
 - also called **ridge regression**
 
-### **7.** <big>Normalization</big>{#7}
+[back to the top](#linear-regression)
+
+### **7.** <big>Normalization</big>
 - Improving model accuracy: Comparability in values between features across different dimensions can significantly enhance the accuracy of model learning.
 - Accelerating learning convergence: Searching for the optimum becomes notably smoother, making it easier for the model to converge correctly to the optimal solution.
 
-    ####  Min-Max normalization{#7.1}
+    #### 7.1 Min-Max normalization
     $$x^{*} = \frac{x - x_{min}}{x_{max} - x_{min}}$$
     - Maps the data along any dimension to [0,1]
     - The purpose of **min-max normalization**: make the impact of each feature compatible, which involves scaling transformations of the features
     - Normalizing data will alter the distribution of the feature data.
-    #### Mean normalization{#7.2}
+    #### 7.2 Mean normalization
     $$x^{*} = \frac{x - \mu}{\sigma}$$
     where
     $$\mu = \frac{1}{N} \displaystyle \sum^{N}_{n=1} x^{(i)},  \sigma^2 = \frac{1}{N} \displaystyle \sum^{N}_{n=1} (x^{(i)} - \mu)^2$$
@@ -97,9 +109,13 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
     - **Mean normalization**: aims to make different features comparable to each other
     - The distribution of the feature data remains unchanged
 
-###  <big>Summary</big>{#sum}
+[back to the top](#linear-regression)
+
+###  <big>Summary</big>
 - Data fits: linear regressio model may not be the best selected model, sometimes underfit or overfit.
 - One method of assessing fit: test **generalization** = model's ability to predict the held out data
 - **Optimization** is essential: stochastic and batch iterative approaches; analystic when available 
+
+[back to the top](#linear-regression)
 
 
