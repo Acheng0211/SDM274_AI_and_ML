@@ -46,7 +46,7 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 - Linear regression model: $y(x) = w^T\mathbf{x}$
 - MSE loss: $l(w) = \frac{1}{2N} \displaystyle \sum^{N}_{n=1} [t^{(n)} - y({x^{(n)}})]^2$, convex
 
-    ####  4.1 Least square solution
+    #### 4.1 Least square solution
     1. let the gredient equal to 0, to find the minima: $\nabla l(w) = -\frac{1}{N} \displaystyle \sum^{N}_{n=1} (t^{(n)} - w^T\mathbf{x}{(n)})\mathbf{x}^{(n)}$ = 0
     2. then we get: $w = (\mathbf{x}^{T}\mathbf{x})^{-1}\mathbf{x}^{T}t$
 

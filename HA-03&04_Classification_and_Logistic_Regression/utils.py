@@ -37,8 +37,11 @@ def classify_data(data):
 def split_data(X, y, test_size=0.3, random_state = 42):
     # 划分训练集和测试集，这里我们按照70%训练集，30%测试集的比例来划分
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
-    y_train[y_train == 2] = -1
-    y_test[y_test == 2] = -1
+    #Perceptron时-1, LogisticRegression时0
+    # y_train[y_train == 2] = -1
+    # y_test[y_test == 2] = -1
+    y_train[y_train == 2] = 0
+    y_test[y_test == 2] = 0
     y_train = y_train.reshape(-1,1)
     y_test = y_test.reshape(-1,1)
 

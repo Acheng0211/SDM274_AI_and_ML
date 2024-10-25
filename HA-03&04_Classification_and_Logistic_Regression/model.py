@@ -129,6 +129,7 @@ class LogisticRegression:
 
     def _gradient(self, X, y, y_pred):
         return (-(y - y_pred).T @ X / y.size).reshape(-1, 1)
+        # return - 1 / y_pred.shape[0] * X.T @ (y - y_pred).reshape(-1, 1)
 
     def _preprocess_data(self,X):
         m, n = X.shape
@@ -138,22 +139,29 @@ class LogisticRegression:
         return X_
     
     def fit(self, X, y): 
-        if self.tol is not None:
-            loss_old = np.inf
+        break_out = False
+        epoch_no_improve = 0
 
         X = self._preprocess_data(X)
         for epoch in range(self.epoch):
             y_pred = self._predict_probablity(X)
             loss = self._loss(y, y_pred)
             self.loss.append(loss)
-            loss_error = np.abs(loss_old - loss)
+            loss_error = np.abs(loss - self.best_loss)
             if self.wandb:
                 wandb.log({"loss": loss})
-            if self.tol is not None:
-                if  loss_error < self.tol:
-                    print(f'loss error is {loss_error}, smaller than tolerance, quit at epoch {epoch}')
+            if loss < self.best_loss - self.tol:
+                self.best_loss = loss
+                epoch_no_improve = 0
+            elif loss_error < self.tol:
+                epoch_no_improve += 1
+                if epoch_no_improve >= self.patience:
+                    # print(f'loss error is {loss_error}, smaller than tolerance, quit at epoch {epoch}')
+                    print(f"Early stopping triggered at {epoch} due to the no improvement in loss")
+                    break_out = True
                     break
-                loss_old = loss
+                else:
+                    epoch_no_improve = 0
             
             if self.gd == 'SGD':
                 i = np.random.randint(0, len(X))
@@ -163,6 +171,10 @@ class LogisticRegression:
                 idx = np.random.choice(y.shape[0], batch_size, replace=False)
                 grad = self._gradient(X[idx], y[idx], y_pred[idx]) 
             self.W -= self.lr * grad 
+
+            if break_out:
+                break_out = False
+                break
 
     def _predict(self, X): 
         X = self._preprocess_data(X)
