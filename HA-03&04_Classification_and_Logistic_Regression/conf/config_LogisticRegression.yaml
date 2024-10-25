@@ -7,6 +7,16 @@ epoch: 1000
 tol: 1e-6
 gd: "SGD"   # available: "SGD" "MBGD"
 
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
+  
+hydra:  
+  output_subdir: null  
+  run:  
+    dir: .
+
 wandb:
   project: "Logistic Regression"
   # dir: "./outputs"

@@ -7,6 +7,16 @@ epoch: 9000
 tol: 0.00001
 gd: "SGD"   # available: "SGD" "BGD"
 
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
+  
+hydra:  
+  output_subdir: null  
+  run:  
+    dir: .
+
 wandb:
   project: "Perceptron"
   # dir: "./outputs"
