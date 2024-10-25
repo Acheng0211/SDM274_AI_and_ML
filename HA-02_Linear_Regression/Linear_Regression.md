@@ -1,5 +1,5 @@
 # Linear Regression 
-<div style="text-align: right">noted by Acheng0211(Guojing Huang, SUSTech)</div> 
+<div align="right">noted by Acheng0211(Guojing Huang, SUSTech)</div>
 
 - [What is Regression?](#1-what-is-regression)
 - [Linear Regression model](#2-linear-regression-model)
@@ -46,10 +46,12 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 - Linear regression model: $y(x) = w^T\mathbf{x}$
 - MSE loss: $l(w) = \frac{1}{2N} \displaystyle \sum^{N}_{n=1} [t^{(n)} - y({x^{(n)}})]^2$, convex
 
+    <span id="41-least-square-solution"></span>
     #### 4.1 Least square solution
     1. let the gredient equal to 0, to find the minima: $\nabla l(w) = -\frac{1}{N} \displaystyle \sum^{N}_{n=1} (t^{(n)} - w^T\mathbf{x}{(n)})\mathbf{x}^{(n)}$ = 0
     2. then we get: $w = (\mathbf{x}^{T}\mathbf{x})^{-1}\mathbf{x}^{T}t$
 
+    <span id="42-gradient-decent"></span>
     #### 4.2 Gradient decent
     - let gradient decrease to the smallest through iteration: Initalize at one point, calculate its gradient and move in the opposite direction. 
 
@@ -96,11 +98,14 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 - Improving model accuracy: Comparability in values between features across different dimensions can significantly enhance the accuracy of model learning.
 - Accelerating learning convergence: Searching for the optimum becomes notably smoother, making it easier for the model to converge correctly to the optimal solution.
 
+    <span id="71-min-max-normalization"></span>
     #### 7.1 Min-Max normalization
     $$x^{*} = \frac{x - x_{min}}{x_{max} - x_{min}}$$
     - Maps the data along any dimension to [0,1]
     - The purpose of **min-max normalization**: make the impact of each feature compatible, which involves scaling transformations of the features
     - Normalizing data will alter the distribution of the feature data.
+    
+    <span id="72-mean-normalization"></span>
     #### 7.2 Mean normalization
     $$x^{*} = \frac{x - \mu}{\sigma}$$
     where
