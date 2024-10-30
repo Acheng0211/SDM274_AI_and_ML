@@ -38,7 +38,7 @@ ___
 ### **3.** <big>Backward Propagation</big>
 
 - Train a network can adjust all the parameters $w = [w_0,w_1,...,w_D]$
-- Design a loss function: cross-entropy $E(w) = -\displaystyle \sum^N_{n=1}[t^{n}log(o^{(n)}) + (1-t^{n})log(1-o^{(n)})]$
+- Design a loss function: **cross-entropy** <span id="cross-entropy"></span> $E(w) = -\displaystyle \sum^N_{n=1}[t^{n}log(o^{(n)}) + (1-t^{n})log(1-o^{(n)})]$  
 - Gradient decent: $$w(t+1) = w(t) - \eta \Delta E(w)$$
 - Derivatives of the loss function: 
 
@@ -61,16 +61,26 @@ ___
     $$1： z_k = w_{k0} + \displaystyle \sum^D_{i=1}w_{ki}x_{i}$$ $$2： o_k = g(z_k)$$
     3. Backward propagation: 
     $$1： \delta^o_k = o_k - t_k$$ $$2： \delta^z_k = \delta^o_kg'(z) = \delta^o_k\cdot g(z)(1-g(z)) = \delta^o_k\cdot o_k(1-o_k)$$ $$3： \frac{\partial E}{\partial w_{ki}} = \delta^z_k\cdot x_i$$
+    4. matrix form:
+    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 & x_4 \end{bmatrix}$$ $$b = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix}, \frac{\partial E}{\partial b} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
+
 - Gradient decent for multi-layer network
 ![多层网络](./assets/multi_layer_network.png "多层网络")
     1. weight gradients: 
         - output-layer: $\frac{\partial E}{\partial w_{kj}} = \frac{\partial E}{\partial o^{(n)}_k}\frac{\partial o^{(n)}_k}{\partial z^{(n)}_k}\frac{\partial z^{(n)}_k}{\partial w_{kj}} = \delta^{z,(n)}_kh^{(n)}_j$, $\delta^{z,(n)}_k$ is the error w.r.t. the net input for unit $k$
-        - hidden-layer: 
-        <!-- todo: complete gd for mlp -->
-    
+        - hidden-layer: $\frac{\partial E}{\partial h^{(n)}_{j}} = \displaystyle \sum_k \frac{\partial E}{\partial o^{(n)}_k}\frac{\partial o^{(n)}_k}{\partial z^{(n)}_k}\frac{\partial z^{(n)}_k}{\partial h^{(n)}_{j}} = \displaystyle \sum_k \delta^{z,(n)}_kw_{kj} := \delta^{h,(n)}_k$,
+        $\frac{\partial E}{\partial u^{(n)}_{j}} = \frac{\partial E}{\partial h^{(n)}_j}\frac{\partial h^{(n)}_j}{\partial u^{(n)}_{j}} = \delta^{h,(n)}_j\frac{\partial h^{(n)}_j}{\partial u^{(n)}_{j}} = \delta^{u,(n)}_j$, $\frac{\partial E}{\partial v_{ji}} = \frac{\partial E}{\partial u^{(n)}_j}\frac{\partial u^{(n)}_j}{\partial v_{ji}} = \delta^{u,(n)}_j\frac{\partial u^{(n)}_j}{\partial v_{ji}}=\delta^{u,(n)}_jx^{(n)}_i$
+    2. example(choose [cross-entropy](#cross-entropy) as loss function): 
+        1. Forward propagation:
+        $$u_j = v_{j0} + \displaystyle \sum^D_{i=1}v_{ji}x_i, h_j = f(u_j), z_k = w_{k0} + \displaystyle \sum^D_{j=1}w_{kj}h_j, o_k = g(z_k)$$
+        2. Backward propagation:
+        $$\delta^{o}_k = \frac{t_k-o_k}{o_k(1-o_k)}, \delta^{z}_k = \delta^{o}_k\cdot o_k(1-o_k),\frac{\partial E}{\partial w_{kj}} = \delta^{z}_k\cdot h_j$$$$\delta^{h}_j = \displaystyle \sum_k \delta^{z}_kw_{kj}, \delta^{u}_j = \delta^{h}_j\cdot f'(u_j)$$$$\frac{\partial E}{\partial v_{ji}} = \delta^{u}_jx_i$$
+    3. matrix form:
+    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} h_1 & h_2 & h_3 & h_4 \end{bmatrix}$$ $$\frac{\partial E}{\partial b_w} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
+    $$\frac{\partial E}{\partial V} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 \end{bmatrix}$$ $$\frac{\partial E}{\partial b_v} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix}$$ $$\delta^z = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} = g'(z)\frac{\partial E}{\partial o}, \delta^u = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} = f'(z)W^T\delta^z$$
 
 - Ways to use weight derivatives
-    - update in the scalar form: $w_{ki} \leftarrow w_{ki} - \eta\nabla \frac{\partial E}{\partial w_{ki}} = w_{ki} - \eta \displaystyle \sum^N_{n=1} \frac{\partial E(o^{(n)},t^{(n)})}{\partial w_{ki}}$
+    - updte in the scalar form: $w_{ki} \leftarrow w_{ki} - \eta\nabla \frac{\partial E}{\partial w_{ki}} = w_{ki} - \eta \displaystyle \sum^N_{n=1} \frac{\partial E(o^{(n)},t^{(n)})}{\partial w_{ki}}$
     - update in the matrix form: $W \leftarrow W - \eta\nabla \frac{\partial E}{\partial W} = W - \eta \displaystyle \sum^N_{n=1} \frac{\partial E(o^{(n)},t^{(n)})}{\partial W}$
     - Use a fixed learning rate and add momentum: $w_{ki}\leftarrow w_{ki} - v, v \leftarrow \gamma v + \eta \frac{\partial E}{\partial w_{ki}}$
 - Overfitting
@@ -84,6 +94,6 @@ ___
 [back to the top](#multi-layer-perceptron)
 
 ### **4.** <big>Summary</big>
-
+<!-- todo: complete summary after HA05 -->
 
 [back to the top](#multi-layer-perceptron)
