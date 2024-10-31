@@ -1,6 +1,6 @@
 name: "MLP"
 # dataset_path: "./data/wine.data"
-dataset_path: "/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #debug
+dataset_path: "/home/hgj/SDM274/HA-05_Multilayer_Perceptron/data/color_dataset.csv" #debug
 wandb_on_off: false        
 lr: 1e-45
 epoch: 10000

@@ -2,23 +2,22 @@ import hydra
 import hydra.conf
 import wandb
 from omegaconf import DictConfig
-import utils as uts
+import utils
 from model import Perceptron
 from model import LogisticRegression
 import os
 import matplotlib.pyplot as plt
 
 
-@hydra.main(version_base="1.3", config_path="./conf", config_name="config_LogisticRegression")
+@hydra.main(version_base="1.3", config_path="./conf", config_name="config_MLP")
 def main(cfg: DictConfig):
 
     # Preprocess dataset
     dataset_path = cfg.dataset_path
     print("If path is existed:", os.path.exists(dataset_path))
-    data_raw = uts.load_data(dataset_path)
-    data_filtered = uts.filter(data_raw)
-    X, y = uts.classify_data(data_filtered)
-    X_train, X_test, y_train, y_test = uts.split_data(X, y, test_size=0.3, random_state=42)
+    data_raw = utils.load_data(dataset_path)
+    X, y = utils.classify_data(data_raw)
+    X_train, X_val, X_test, y_train, y_val, y_test = utils.split_data(X, y, test_size=0.3, val_size=0.2, random_state=42)
     
     if(cfg.wandb_on_off and cfg.name == "Perceptron"):
         wandb.init(project="Perceptron")
