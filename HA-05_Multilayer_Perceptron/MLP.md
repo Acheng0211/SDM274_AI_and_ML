@@ -58,11 +58,15 @@ ___
 ![单层网络](./assets/single_layer_network.png "单层网络")
     1. Error gradients: $\frac{\partial E}{\partial w_{ki}} = \frac{\partial E}{\partial o_{k}}\frac{\partial o_k}{\partial z_{k}}\frac{\partial z_k}{\partial w_{ki}} = \delta^o_k\frac{\partial o_k}{\partial z_{k}}\frac{\partial z_k}{\partial w_{ki}} = \delta^z_k\frac{\partial z_k}{\partial w_{ki}} = \delta^z_k\cdot x_i$, computabkle for any **coninuous** activation function and error function
     2. Forward propagation: 
-    $$1： z_k = w_{k0} + \displaystyle \sum^D_{i=1}w_{ki}x_{i}$$ $$2： o_k = g(z_k)$$
+    $$1： z_k = w_{k0} + \displaystyle \sum^D_{i=1}w_{ki}x_{i}$$
+    $$2： o_k = g(z_k)$$
     3. Backward propagation: 
-    $$1： \delta^o_k = o_k - t_k$$ $$2： \delta^z_k = \delta^o_kg'(z) = \delta^o_k\cdot g(z)(1-g(z)) = \delta^o_k\cdot o_k(1-o_k)$$ $$3： \frac{\partial E}{\partial w_{ki}} = \delta^z_k\cdot x_i$$
+    $$1： \delta^o_k = o_k - t_k$$
+    $$2： \delta^z_k = \delta^o_kg'(z) = \delta^o_k\cdot g(z)(1-g(z)) = \delta^o_k\cdot o_k(1-o_k)$$
+    $$3： \frac{\partial E}{\partial w_{ki}} = \delta^z_k\cdot x_i$$
     4. matrix form:
-    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 & x_4 \end{bmatrix}$$ $$b = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix}, \frac{\partial E}{\partial b} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
+    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 & x_4 \end{bmatrix}$$
+    $$b = \begin{bmatrix} b_1 \\ b_2 \\ b_3 \end{bmatrix}, \frac{\partial E}{\partial b} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
 
 - Gradient decent for multi-layer network
 ![多层网络](./assets/multi_layer_network.png "多层网络")
@@ -74,10 +78,15 @@ ___
         1. Forward propagation:
         $$u_j = v_{j0} + \displaystyle \sum^D_{i=1}v_{ji}x_i, h_j = f(u_j), z_k = w_{k0} + \displaystyle \sum^D_{j=1}w_{kj}h_j, o_k = g(z_k)$$
         2. Backward propagation:
-        $$\delta^{o}_k = \frac{t_k-o_k}{o_k(1-o_k)}, \delta^{z}_k = \delta^{o}_k\cdot o_k(1-o_k),\frac{\partial E}{\partial w_{kj}} = \delta^{z}_k\cdot h_j$$$$\delta^{h}_j = \displaystyle \sum_k \delta^{z}_kw_{kj}, \delta^{u}_j = \delta^{h}_j\cdot f'(u_j)$$$$\frac{\partial E}{\partial v_{ji}} = \delta^{u}_jx_i$$
+        $$\delta^{o}_k = \frac{t_k-o_k}{o_k(1-o_k)}, \delta^{z}_k = \delta^{o}_k\cdot o_k(1-o_k),\frac{\partial E}{\partial w_{kj}} = \delta^{z}_k\cdot h_j$$
+        $$\delta^{h}_j = \displaystyle \sum_k \delta^{z}_kw_{kj}, \delta^{u}_j = \delta^{h}_j\cdot f'(u_j)$$
+        $$\frac{\partial E}{\partial v_{ji}} = \delta^{u}_jx_i$$
     3. matrix form:
-    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} h_1 & h_2 & h_3 & h_4 \end{bmatrix}$$ $$\frac{\partial E}{\partial b_w} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
-    $$\frac{\partial E}{\partial V} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 \end{bmatrix}$$ $$\frac{\partial E}{\partial b_v} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix}$$ $$\delta^z = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} = g'(z)\frac{\partial E}{\partial o}, \delta^u = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} = f'(z)W^T\delta^z$$
+    $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} h_1 & h_2 & h_3 & h_4 \end{bmatrix}$$ 
+    $$\frac{\partial E}{\partial b_w} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
+    $$\frac{\partial E}{\partial V} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} \begin{bmatrix} x_1 & x_2 & x_3 \end{bmatrix}$$ 
+    $$\frac{\partial E}{\partial b_v} = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix}$$ 
+    $$\delta^z = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} = g'(z)\frac{\partial E}{\partial o}, \delta^u = \begin{bmatrix}\delta^u_1 \\ \delta^u_2 \\ \delta^u_3 \\ \delta^u_4 \end{bmatrix} = f'(z)W^T\delta^z$$
 
 - Ways to use weight derivatives
     - updte in the scalar form: $w_{ki} \leftarrow w_{ki} - \eta\nabla \frac{\partial E}{\partial w_{ki}} = w_{ki} - \eta \displaystyle \sum^N_{n=1} \frac{\partial E(o^{(n)},t^{(n)})}{\partial w_{ki}}$
