@@ -1,6 +1,6 @@
 name: "MLP"
-# dataset_path: "./data/wine.data"
-dataset_path: "/home/hgj/SDM274/HA-05_Multilayer_Perceptron/data/color_dataset.csv" #debug
+# dataset_path: "/home/hgj/SDM274/HA-05_Multilayer_Perceptron/data/color_dataset.csv" #ubuntu
+dataset_path: "./data/color_dataset.csv" #windows
 wandb_on_off: false        
 lr: 1e-4
 epoch: 10000
