@@ -58,7 +58,7 @@ class HiddenLayer:
         self.b_w = self.b_w - self.db_w * self.lr / self.batch_size
         return d_previous
     
-class OutputLayer:
+class OutputLayer: #todo: right?
     def __init__(self, n_in, n_out, batch_size, n_unit, activation, lr):
         self.W = np.random.randn(n_in, n_out) * 0.01
         self.b_w = np.zeros((batch_size, n_out))
@@ -87,11 +87,12 @@ class OutputLayer:
         return dx
     
 class MLP:
-    def __init__(self, input_size, batch_size, num_classes, gd, wandb, lossf, tol, lr=0.001, hidden_layer_sizes=(256,), activation='sigmoid'):
+    def __init__(self, input_size, batch_size, num_classes, epoch, gd, wandb, lossf, tol, lr=0.001, hidden_layer_sizes=(256,), activation='sigmoid'):
         self.wandb = wandb
         self.batch_size = batch_size
         self.lr = lr
         self.gd = gd
+        self.epoch = epoch
         self.activation = activation
         self.lossf = lossf
         self.loss = []
@@ -107,7 +108,7 @@ class MLP:
         #将输入层、隐藏层、输出层、激活函数层组合成一个list
         self.layers = [self.input_layer]
         for i in range(len(self.layer_list)):
-            self.layers.append(HiddenLayer(self.layer_list[i][0], self.layer_list[i][1], batch_size, activation, lr=lr))
+            self.layers.append(HiddenLayer(self.layer_list[i][0], self.layer_list[i][1], self.batch_size, self.avscodevscodactivation, lr=lr))
         self.layers.append(self.output_layer)
     
     def forward_propagation(self, x):
@@ -119,7 +120,8 @@ class MLP:
     
     def backward_propagation(self, dout):
         for layer in reversed(self.layers): #比self.layers[::-1]更快,节省内存，无需切片返回一个新列表
-            dout = layer.backward_propagation(dout)
+            if layer.params['name'] != 'Input':
+                dout = layer.backward_propagation(dout)
         return dout
     
     def criterion(self, y, y_pred):
@@ -137,7 +139,8 @@ class MLP:
         y = y_.copy()
         start_time = time.time()
 
-        X = self._preprocess_data(X)
+        X #= self._preprocess_data(X)
+        self._combine_layers()
         for epoch in self.conditional_tqdm(range(self.epoch), progress_bar):
             loss_error = np.abs(loss - self.best_loss)
             if self.wandb:
@@ -236,6 +239,13 @@ class MLP:
         plt.ylabel('Loss')
         plt.title(f'{name}_{self.gd}_loss')
         plt.savefig(os.path.join('./output', f'{name}_{self.gd}_loss.png'))
+        plt.show()
+
+    #todo: plot scatter data and classification boundary
+    def plot_data(self, X, y, name):
+        plt.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis')
+        plt.title(f'{name}_data')
+        plt.savefig(os.path.join('./output', f'{name}_data.png'))
         plt.show()
 
     def conditional_tqdm(self, iterable: range, use_progress_bar: bool=False) -> Generator[int, None, None]:

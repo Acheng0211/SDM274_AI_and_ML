@@ -2,10 +2,15 @@ name: "MLP"
 # dataset_path: "./data/wine.data"
 dataset_path: "/home/hgj/SDM274/HA-05_Multilayer_Perceptron/data/color_dataset.csv" #debug
 wandb_on_off: false        
-lr: 1e-45
+lr: 1e-4
 epoch: 10000
 tol: 1e-6
 gd: "SGD"   # available: "SGD" "MBGD"
+input_size: 3 
+batch_size: 10
+num_classes: 3
+loss_function: "cross_entropy"
+activation_function: "sigmoid" # available: "sigmoid" "ReLU" "tanh"
 
 defaults:  
   - _self_  

@@ -25,6 +25,14 @@ def generate_data():
     # 保存数据集为CSV文件（如果需要）
     data.to_csv(save_path + '/' + 'color_dataset.csv', index=False)
 
+def generate_dataset():
+    np.random.seed(3407)
+    class_1 = np.hstack([np.random.normal( 1, 1, size=(500, 2)),  np.ones(shape=(500, 1))])
+    class_2 = np.hstack([np.random.normal(-1, 1, size=(200, 2)), -np.ones(shape=(200, 1))])
+    dataset = np.vstack([class_1, class_2])
+    X, y = dataset[:,:2], dataset[:,2]
+    return X, y
+
 
 def load_data(file_name):
     # 读取数据集
