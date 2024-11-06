@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def generate_data():
     # 生成数据集
@@ -41,7 +42,7 @@ def load_data(file_name):
 
     # 显示原始数据集的类别分布
     # print("Original dataset class distribution:")
-    # print(wine_data['class_label'].value_counts())
+    # print(data_raw['class_label'].value_counts())
 
     return data_raw
 
@@ -51,17 +52,17 @@ def filter(data):
 
     # 显示新数据集的类别分布
     # print("\nNew dataset class distribution:")
-    # print(wine_data_filtered['class_label'].value_counts())
+    # print(data_filtered['class_label'].value_counts())
 
     # # 检查新数据集的形状
     # print("\nOriginal dataset shape:", data.shape)
-    # print("New dataset shape:", wine_data_filtered.shape)
+    # print("New dataset shape:", data_filtered.shape)
 
     return data_filtered
 
 def classify_data(data):
     # 将数据分为特征和标签
-    X = data.drop('class_label', axis=1).values #wine_data_filtered
+    X = data.drop('class_label', axis=1).values #data_filtered
     y = data['class_label'].values
 
     return X, y
@@ -84,5 +85,8 @@ def split_data(X, y, test_size=0.3, val_size = 0.2, random_state = 42):
 
     return X_train, X_val, X_test, y_train.reshape(-1,1), y_val.reshape(-1,1),y_test.reshape(-1,1)
 
-if __name__ == '__main__':
-    generate_data()
+
+# if __name__ == '__main__':
+#     X,y= generate_dataset()
+#     plt.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis')
+#     plt.show()

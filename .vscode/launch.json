@@ -10,6 +10,13 @@
             "request": "launch",
             "program": "./HA-03&04_Classification_and_Logistic_Regression/train.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "HW05 test.py debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./HA-05_Multilayer_Perceptron/my_test.py",
+            "console": "integratedTerminal"
         }
     ]
 }

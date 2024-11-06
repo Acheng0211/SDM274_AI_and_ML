@@ -9,85 +9,118 @@ from tqdm import tqdm
 #https://github.com/XavierSpycy/NumPyMultilayerPerceptron/blob/main/nn/layers.py
 
 class InputLayer:
-    def __init__(self, n_in, n_out, batch_size, n_unit):
-        self.V = np.random.randn(n_in, n_out) * 0.01
-        self.b_v = np.zeros((batch_size, n_out))
-        self.batch_size = batch_size
-        self.n_unit = n_unit
-        self.params = {'name': 'Input', 'size':[n_in, n_out],'V': self.V, 'b_v': self.b_v, 'n_unit': self.n_unit}
+    def __init__(self, input_size):
+        """
+        n_in: 
+        """
+        self.n_out = input_size
+        self.params = {'name': 'Input', 'size':input_size}
 
-    def forward_propagation(self, x):
-        self.x = x
-        output = np.dot(x, self.V) + self.b_v
-        return output
-    
-    def backward_propagation(self, dout, output):
-        dout = output * (1 - output) * dout
-        dx = np.dot(dout, self.V.T)
-        self.dV = np.dot(self.x.T, dout)
-        self.db_v = dout
-        self.V = self.V - self.dV * self.lr / self.batch_size
-        self.b_v = self.b_v - self.db_v * self.lr / self.batch_size
-        return dx
     
 class HiddenLayer:
-    def __init__(self, n_in, n_out, batch_size, n_feature, n_unit, activation, lr):
-        self.W = np.random.randn(n_in, n_out) * 0.01
-        self.b_w = np.zeros((batch_size, n_out))
+    def __init__(self, n_in, n_units, batch_size, activation, lr):
+        self.n_in = n_in 
+        self.n_out = n_units
         self.activation = activation
         self.lr = lr
         self.batch_size = batch_size
-        self.n_unit = n_unit
-        self.params = {'name': 'Hidden', 'size':[n_in, n_out],'W': self.W, 'b_w': self.b_w, 'activation': self.activation, 'lr': self.lr}
+        self.params = {'name': 'Hidden', 'size':[self.n_in, self.n_out],'W': self.W, 'b': self.b, 'batch_size': self.batch_size,'activation': self.activation, 'lr': self.lr}
 
-    def forward_propagation(self, x):
-        self.x = x
-        output = np.dot(x, self.W) + self.b_w
+    def init_param(self):
+        """
+        init weights and bias, according to "uniform" initialization method in PyTorch
+        """
+        gain = np.sqrt(2)
+        self.W = gain * np.random.uniform(low=0, high=self.n_out, size=(self.n_in,self.n_out))
+        self.b = np.zeros((self.n_out, ))
+
+    def forward_propagation(self, X):
+        self.X = X
+        u = np.dot(X, self.W) + self.b
         if self.activation is 'sigmoid':
-            output = 1 / (1 + np.exp(-output))
-        self.activated_output = output
-        return self.activated_output
+            h = self.Activation(u)
+        self.activated_output = h
+        return h
     
     def backward_propagation(self, dout):
         if self.activation is 'sigmoid':
-            dout = self.activated_output * (1 - self.activated_output) * dout
+            dout = self.Activation_derivative(self.activated_output) * dout
         d_previous = np.dot(dout, self.W.T)
-        self.dW = np.dot(self.x.T, dout)
-        self.db_w = dout
+        self.dW = np.dot(self.X.T, dout)
+        self.db = dout
         self.W = self.W - self.dW * self.lr / self.batch_size
-        self.b_w = self.b_w - self.db_w * self.lr / self.batch_size
+        self.b = self.b - self.db * self.lr / self.batch_size
         return d_previous
     
-class OutputLayer: #todo: right?
-    def __init__(self, n_in, n_out, batch_size, n_unit, activation, lr):
-        self.W = np.random.randn(n_in, n_out) * 0.01
-        self.b_w = np.zeros((batch_size, n_out))
+    def Activation(self, activation, u):
+        """
+        Return activation function and its derivative
+        """
+        activation = self.activation
+        if activation is 'sigmoid':
+            h = 1 / (1 + np.exp(-u))
+        return h
+    
+    def Activation_derivative(self, activation, u):
+        """
+        Return the derivative of activation function 
+        """
+        activation = self.activation
+        if activation is 'sigmoid':
+            d_h = u * (1 - u)
+        return d_h
+
+
+class OutputLayer:
+    def __init__(self, n_units, batch_size, activation, lr):
+        self.n_in = n_units
+        self.n_out = n_units
         self.activation = activation
         self.lr = lr
         self.batch_size = batch_size
-        self.n_unit = n_unit
-        self.params = {'name': 'Output', 'size':[n_in, n_out],'W': self.W, 'b_w': self.b_w, 'activation': self.activation, 'lr': self.lr}
+        self.params = {'name': 'Output', 'size':[self.n_in, self.n_out],'W': self.W, 'b': self.b, 'batch_size': self.batch_size,'activation': self.activation, 'lr': self.lr}
 
-    def forward_propagation(self, x):
-        self.x = x
-        output = np.dot(x, self.W) + self.b_w
+    def forward_propagation(self, X):
+        self.X = X
+        z = np.dot(X, self.W) + self.b
         if self.activation is 'sigmoid':
-            output = 1 / (1 + np.exp(-output))
-        self.activated_output = output
-        return output
+            o = self.Activation(z)
+        self.activated_output = o
+        return o
     
     def backward_propagation(self, dout):
         if self.activation is 'sigmoid':
-            dout = self.activated_output * (1 - self.activated_output) * dout
-        dx = np.dot(dout, self.W.T)
-        self.dW = np.dot(self.x.T, dout)
-        self.db_w = dout
+            dout = self.Activation_derivative(self.activated_output) * dout
+        d_previous = np.dot(dout, self.W.T)
+        self.dW = np.dot(self.X.T, dout)
+        self.db = dout
         self.W = self.W - self.dW * self.lr / self.batch_size
-        self.b_w = self.b_w - self.db_w * self.lr / self.batch_size
-        return dx
+        self.b = self.b - self.db * self.lr / self.batch_size
+        return d_previous
+    
+    def Activation(self, activation, z):
+        """
+        Return activation function and its derivative
+        """
+        activation = self.activation
+        if activation is 'sigmoid':
+            o = 1 / (1 + np.exp(-z))
+        return o
+    
+    def Activation_derivative(self, activation, z):
+        """
+        Return the derivative of activation function 
+        """
+        activation = self.activation
+        if activation is 'sigmoid':
+            d_o = z * (1 - z)
+        return d_o
     
 class MLP:
-    def __init__(self, input_size, batch_size, num_classes, epoch, gd, wandb, lossf, tol, lr=0.001, hidden_layer_sizes=(256,), activation='sigmoid'):
+    def __init__(self, input_size, batch_size, lossf, hidden_layer_sizes, activation, epoch, gd, wandb, tol, lr):
+        """
+        
+        """
         self.wandb = wandb
         self.batch_size = batch_size
         self.lr = lr
@@ -100,15 +133,18 @@ class MLP:
         #线性层列表初始化
         self.layer_list = [[hidden_layer_sizes[i], hidden_layer_sizes[i + 1]]
                            for i in range(len(hidden_layer_sizes) - 1)]
-        self.input_layer = InputLayer(input_size, hidden_layer_sizes[0], batch_size, activation, lr=lr)
-        self.hidden_layer = HiddenLayer(hidden_layer_sizes[-1], num_classes, batch_size, activation, lr=lr)
-        self.output_layer = OutputLayer(hidden_layer_sizes[-1], num_classes, batch_size, activation, lr=lr)
+        self.input_layer = InputLayer(input_size, hidden_layer_sizes[0])
+        self.hidden_layer = HiddenLayer(hidden_layer_sizes[-1], batch_size, activation, lr)
+        self.output_layer = OutputLayer(hidden_layer_sizes[-1], batch_size, activation, lr)
         
     def _combine_layers(self):  
         #将输入层、隐藏层、输出层、激活函数层组合成一个list
         self.layers = [self.input_layer]
+        n_out = self.input_layer.n_out
         for i in range(len(self.layer_list)):
-            self.layers.append(HiddenLayer(self.layer_list[i][0], self.layer_list[i][1], self.batch_size, self.avscodevscodactivation, lr=lr))
+            if self.layer_list[i][0].n_in is None:
+                self.layers.append(HiddenLayer(n_out, self.batch_size, self.activation, self.lr))
+            self.layers.append(HiddenLayer(self.layer_list[i][0], self.batch_size, self.activation, self.lr))
         self.layers.append(self.output_layer)
     
     def forward_propagation(self, x):
@@ -131,7 +167,7 @@ class MLP:
             delta = y_pred_clip - y
         return loss, delta
 
-    def fit(self, X_, y_, X_val, y_val, batch_size, progress_bar): 
+    def fit(self, X_, y_, X_val, y_val, progress_bar): 
         break_out = False
         epoch_no_improve = 0
         batch_size = self.batch_size
@@ -139,25 +175,30 @@ class MLP:
         y = y_.copy()
         start_time = time.time()
 
-        X #= self._preprocess_data(X)
+        # X = self._preprocess_data(X)
         self._combine_layers()
         for epoch in self.conditional_tqdm(range(self.epoch), progress_bar):
+            loss = np.zeros(X.shape[0] // batch_size)
             loss_error = np.abs(loss - self.best_loss)
             if self.wandb:
                 wandb.log({"loss": loss})
             if self.gd == 'SGD':
                 i = np.random.randint(0, len(X))
-                grad = self._gradient(np.expand_dims(X[i], axis=0), np.expand_dims(y[i], axis=0), np.expand_dims(y_pred[i], axis=0))
+                y_hat = self.forward_propagation(X[i])
+                loss, delta = self.criterion(y[i], y_hat)
+                self.backward_propagation(delta)
+                self.loss.append(loss)
+                #gradient decent
             elif self.gd == 'MBGD':
                 idx = np.random.choice(y.shape[0], batch_size, replace=False)
-                for i in idx:
-                    X_batch = X[i]
-                    y_batch = y[i]
+                for id in idx:
+                    X_batch = X[id]
+                    y_batch = y[id]
                     y_hat = self.forward_propagation(X_batch)
                     loss, delta = self.criterion(y_batch, y_hat)
                     self.backward_propagation(delta)
-                    #update the weights
-                    i += 1
+                    #gradient decent
+                    id += 1
                     self.loss.append(loss)
             end_time = time.time()
 
