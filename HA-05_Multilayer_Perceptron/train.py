@@ -25,6 +25,7 @@ def main(cfg: DictConfig):
             wandb.init(project="MLP_MBGD")
         model = MLP(input_size=cfg.input_size, batch_size=cfg.batch_size, num_classes=cfg.num_classes, epoch=cfg.epoch, gd=cfg.gd, wandb=cfg.wandb_on_off, lossf=cfg.loss_function, tol=cfg.tol, lr=cfg.lr, activation=cfg.activation_function)
 
+    model._combine_layers()
     model.fit(X_train, y_train)
     model.evaluate(X_test, y_test)
     model.plot_loss(model.loss, cfg.name)

@@ -10,6 +10,8 @@ ___
   - [Logistic Regression](/HA-03&04_Classification_and_Logistic_Regression/Classification_and_Logistic_Regression.md)
 - **Neural network**
   - [Multi-layer Perceptron(MLP)](/HA-05_Multilayer_Perceptron/MLP.md)
+- **Nearest Neighbors**
+  - [k-Nearest Neighbors(knn)](/HA-06_kNN/knn.md)
 
 
   ___

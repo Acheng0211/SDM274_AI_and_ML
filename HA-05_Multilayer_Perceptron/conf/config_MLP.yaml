@@ -6,7 +6,7 @@ lr: 1e-4
 epoch: 10000
 tol: 1e-6
 gd: "SGD"   # available: "SGD" "MBGD"
-input_size: 3 
+input_size: 2 
 batch_size: 10
 n_units: 6
 n_layers: 6

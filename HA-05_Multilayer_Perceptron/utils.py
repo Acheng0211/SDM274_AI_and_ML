@@ -29,7 +29,7 @@ def generate_data():
 def generate_dataset():
     np.random.seed(3407)
     class_1 = np.hstack([np.random.normal( 1, 1, size=(500, 2)),  np.ones(shape=(500, 1))])
-    class_2 = np.hstack([np.random.normal(-1, 1, size=(200, 2)), -np.ones(shape=(200, 1))])
+    class_2 = np.hstack([np.random.normal(-1, 1, size=(500, 2)), -np.ones(shape=(500, 1))])
     dataset = np.vstack([class_1, class_2])
     X, y = dataset[:,:2], dataset[:,2]
     return X, y

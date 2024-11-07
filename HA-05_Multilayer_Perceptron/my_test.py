@@ -3,7 +3,7 @@ import hydra.conf
 import wandb
 from omegaconf import DictConfig
 import utils
-from model3 import MLP
+from model import MLP
 import os
 import matplotlib.pyplot as plt
 
@@ -17,11 +17,11 @@ def main(cfg: DictConfig):
     model = MLP(cfg.input_size, cfg.n_units, cfg.n_layers, cfg.batch_size, cfg.loss_function, cfg.activation_function, cfg.epoch, cfg.gd, cfg.wandb_on_off, cfg.tol, cfg.lr)
 
     model._combine_layers()
-    print(len(model.layers))
+    print(f"num_layers:{len(model.layers)}")
     model.fit(X_train, y_train, X_val, y_val)
-    model.evaluate(X_test, y_test)
+    # model.evaluate(X_test, y_test)
     model.plot_loss(model.loss, cfg.name)
-    model.plot_data(X_test, y_test)
+    # model.plot_data(X_test, y_test)
     wandb.finish()
 
 if __name__ == "__main__":
