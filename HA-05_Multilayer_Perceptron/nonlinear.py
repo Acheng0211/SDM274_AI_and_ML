@@ -1,13 +1,16 @@
 import numpy as np 
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 import matplotlib.pyplot as plt
+import utils
 
 class MLP:
     def __init__(self, layers):
         self.layers = layers
         self.weights = []
         self.biases = []
+        self.loss = []
         self.init_weights()
 
     def init_weights(self):
@@ -45,6 +48,7 @@ class MLP:
             self.biases[i] -= learning_rate * np.sum(self.deltas[i], axis=0, keepdims=True) / m
 
     def train(self, X, y, epochs, learning_rate, batch_size=None, method='SGD'):
+        self.gd = method
         if method not in ['SGD', 'MBGD']:
             raise ValueError("method should be either 'SGD' or 'MBGD'")
         
@@ -61,27 +65,37 @@ class MLP:
                 X_batch, y_batch = X[indices[start:end]], y[indices[start:end]]
                 self.forward(X_batch)
                 self.backward(X_batch, y_batch, learning_rate)
-            if epoch % 100 == 0:
-                loss = np.mean((self.forward(X) - y) ** 2)
+            loss = np.mean((self.forward(X) - y) ** 2)
+            self.loss.append(loss)
+            if epoch % 100 == 0:            
                 print(f'Epoch {epoch}, Loss: {loss}')
 
     def predict(self, X):
         return self.forward(X)
+    
+def plot_loss(models, layers_list):
+    plt.figure(figsize=(10, 6))
+    for model, layers in zip(models, layers_list):
+        plt.plot(model.loss, label=f'Model {layers}')
+    plt.title('MLP_approximation_loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
 
-
-def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=None):
+def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=None, method='MBGD'):
     kf = KFold(n_splits=k)
-    scores = []
+    scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
     for train_index, val_index in kf.split(X):
         X_train, X_val = X[train_index], X[val_index]
         y_train, y_val = y[train_index], y[val_index]
-        model.train(X_train, y_train, epochs, learning_rate, batch_size)
-        predictions = model.predict(X_val)
-        loss = mean_squared_error(y_val, predictions)
-        scores.append(loss)
-        # accuracy = np.mean(np.round(predictions) == y_val)
-        # scores.append(accuracy)
-    return np.mean(scores)
+        model.train(X_train, y_train, epochs, learning_rate, batch_size, method)
+        predictions = np.round(model.predict(X_val))
+        scores['accuracy'].append(accuracy_score(y_val, predictions))
+        scores['recall'].append(recall_score(y_val, predictions, average='weighted'))
+        scores['precision'].append(precision_score(y_val, predictions, average='weighted'))
+        scores['f1'].append(f1_score(y_val, predictions, average='weighted'))
+    return {metric: np.mean(values) for metric, values in scores.items()}
 
 # 生成数据集
 def nonlinear_function(x):
@@ -89,28 +103,26 @@ def nonlinear_function(x):
 
 if __name__ == "__main__":
     X = np.linspace(0, 1, 100).reshape(-1, 1)
-    y = nonlinear_function(X)
+    y1 = nonlinear_function(X)
+    y = np.round(y1)
 
     # 训练和评估 MLP 使用不同的超参数
-    layers_list = [[1, 10, 1], [1, 20, 1], [1, 5, 10, 1]]
+    layers_list = [[1, 10, 1], [1, 20, 1], [1, 10, 20, 1]]
+    models = []
+    results = []
     best_score = 0
     best_model = None
-
-    best_model = MLP([1, 10, 1])
-    best_score = cross_validate(best_model, X, y, k=5, epochs=3000, learning_rate=0.1, batch_size=10)
-
-    # for layers in layers_list:
-    #     model = MLP(layers)
-    #     score = cross_validate(model, X, y, k=5, epochs=10000, learning_rate=0.01, batch_size=10)
-    #     print(f"结果1: {layers}, 交叉验证得分: {score}")
-    #     if score > best_score:
-    #         best_score = score
-    #         best_model = model
-
+    method = "MBGD"
+  
+    for layers in layers_list:
+        model = MLP(layers)
+        metrics = cross_validate(model, X, y, k=5, epochs=8000, learning_rate=0.01, batch_size=10, method=method)
+        models.append(model)
+        results.append((layers, metrics))
+        
     # 绘制结果
-    plt.scatter(X, y, label='raw data')
-    plt.plot(X, best_model.predict(X), label='MLP approximation', color='red')
-    plt.legend()
-    plt.show()
+    utils.plot_nonliear(X, y1, models, layers_list, method)
+    utils.plot_loss(models, layers_list, "Nonlinear", method)
 
-    print(f"最佳模型层数: {best_model.layers}, 交叉验证得分: {best_score}")
+    utils.LOG_RESULTS(results,method)
+                                                                                                                                                                                                                                                                                                         

@@ -1,17 +1,14 @@
 name: "MLP"
-# dataset_path: "/home/hgj/SDM274/HA-05_Multilayer_Perceptron/data/color_dataset.csv" #ubuntu
-dataset_path: "./data/color_dataset.csv" #windows
 wandb_on_off: false        
-lr: 1e-4
-epoch: 10000
+lr: 1e-2
+epoch: 8000
 tol: 1e-6
 gd: "SGD"   # available: "SGD" "MBGD"
-input_size: 2 
+input_size : 1 # Nonlinear, 2 when Classifier
 batch_size: 10
-n_units: 6
-n_layers: 6
-loss_function: "cross_entropy"
-activation_function: "sigmoid" # available: "sigmoid" "ReLU" "tanh"
+layers_list : [[input_size, 10, 1], [input_size, 20, 1], [input_size, 10, 20, 1]]
+k : 5 # k-fold
+mission : "Classifier" # available: "Nonlinear" "Classifier"
 
 defaults:  
   - _self_  

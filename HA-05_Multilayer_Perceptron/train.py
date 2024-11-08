@@ -4,34 +4,31 @@ import wandb
 from omegaconf import DictConfig
 import utils
 from model import MLP
-import os
-import matplotlib.pyplot as plt
 
 
 @hydra.main(version_base="1.3", config_path="./conf", config_name="config_MLP")
 def main(cfg: DictConfig):
-
-    # Preprocess dataset
-    dataset_path = cfg.dataset_path
-    print("If path is existed:", os.path.exists(dataset_path))
-    data_raw = utils.load_data(dataset_path)
-    X, y = utils.classify_data(data_raw)
-    X_train, X_val, X_test, y_train, y_val, y_test = utils.split_data(X, y, test_size=0.3, val_size=0.2, random_state=42)
+    # generate data, initialize outputs of models and evaluations
+    X, y, y_raw = utils.generate_data(cfg.mission)
+    models = []
+    results = []
     
-    if(cfg.wandb_on_off and cfg.name == "MLP"):
-        if cfg.gd == "SGD":
-            wandb.init(project="MLP_SGD")
-        elif cfg.gd == "MBGD":
-            wandb.init(project="MLP_MBGD")
-        model = MLP(input_size=cfg.input_size, batch_size=cfg.batch_size, num_classes=cfg.num_classes, epoch=cfg.epoch, gd=cfg.gd, wandb=cfg.wandb_on_off, lossf=cfg.loss_function, tol=cfg.tol, lr=cfg.lr, activation=cfg.activation_function)
+    # train and evaluate
+    for layers in cfg.layers_list:
+        model = MLP(layers)
+        metrics = utils.cross_validate(model, X, y, cfg.k, cfg.epoch, cfg.lr, cfg.batch_size, cfg.gd)
+        models.append(model)
+        results.append((layers,metrics))
 
-    model._combine_layers()
-    model.fit(X_train, y_train)
-    model.evaluate(X_test, y_test)
-    model.plot_loss(model.loss, cfg.name)
-    model.plot_data(X_test, y_test)
-    wandb.finish()
+    # plot figure and loss
+    if cfg.mission == "Nonlinear":
+        utils.plot_nonliear(X, y_raw, models, cfg.layers_list, cfg.gd)
+    elif cfg.mission == "Classifier":
+        utils.plot_decision_boundary(X, y, models, cfg.layers_list, cfg.gd)
+    utils.plot_loss(models, cfg.layers_list, cfg.mission, cfg.gd)
+
+    # display results
+    utils.LOG_RESULTS(results, cfg.gd)
 
 if __name__ == "__main__":
     main()
-    # evaluation results: accuracy: 0.717948717948718, recall: 0.45, precision: 1.0, F1: 0.6206896551724138

@@ -21,6 +21,7 @@ class MLP:
         self.layers = layers
         self.weights = []
         self.biases = []
+        self.loss = []
         self.init_weights()
 
     def init_weights(self):
@@ -30,7 +31,6 @@ class MLP:
             self.biases.append(np.zeros((1, self.layers[i + 1])))
 
     def sigmoid(self, x):
-        # x = np.clip(x, -500, 500)  # 限制 x 的值以避免溢出
         return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
@@ -58,6 +58,7 @@ class MLP:
             self.biases[i] -= learning_rate * np.sum(self.deltas[i], axis=0, keepdims=True) / m
 
     def train(self, X, y, epochs, learning_rate, batch_size=None, method='SGD'):
+        self.gd = method
         if method not in ['SGD', 'MBGD']:
             raise ValueError("method should be either 'SGD' or 'MBGD'")
         
@@ -74,8 +75,9 @@ class MLP:
                 X_batch, y_batch = X[indices[start:end]], y[indices[start:end]]
                 self.forward(X_batch)
                 self.backward(X_batch, y_batch, learning_rate)
-            if epoch % 100 == 0:
-                loss = np.mean((self.forward(X) - y) ** 2)
+            loss = np.mean((self.forward(X) - y) ** 2)
+            self.loss.append(loss)
+            if epoch % 100 == 0:            
                 print(f'Epoch {epoch}, Loss: {loss}')
 
     def predict(self, X):
@@ -95,49 +97,33 @@ def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=
         scores['f1'].append(f1_score(y_val, predictions, average='weighted'))
     return {metric: np.mean(values) for metric, values in scores.items()}
 
-# 绘制决策边界
-def plot_decision_boundary(model, X, y):
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
-                         np.arange(y_min, y_max, 0.01))
-    Z = np.round(model.predict(np.c_[xx.ravel(), yy.ravel()]))
-    Z = Z.reshape(xx.shape)
-    plt.contourf(xx, yy, Z, alpha=0.8, cmap='viridis')
-    plt.scatter(X[:, 0], X[:, 1], c=y.flatten(), edgecolors='k', marker='o', cmap='viridis')
-    plt.title('Decision Boundary')
-    plt.show()
 
+if __name__ == "__main__":
+    # X, y = utils.generate_dataset()
+    # np.random.seed(0)
+    # X = np.random.randn(100, 2)
+    # y = (X[:, 0] ** 2 + X[:, 1] ** 2 < 1).astype(int).reshape(-1, 1)
+    X, y = make_moons(n_samples=100, noise=0.2, random_state=42)
+    y = y.reshape(-1, 1)
 
-# 生成数据集
-# X, y = utils.generate_dataset()
-# X, y = make_moons(n_samples=1000, noise=0.5, random_state=42)
-X = X_blobs
-y = y_blobs
-y = y.reshape(-1, 1)
+    # 训练和评估 MLP 使用不同的超参数
+    layers_list = [[2, 10, 1],[2, 20, 1],[2, 10, 20, 1]]
+    layers = [2, 10, 1]
+    models = []
+    results = []
+    best_score = 0
+    best_model = None
+    method = "SGD"
+    
+    for layers in layers_list:
+        model = MLP(layers)
+        metrics = cross_validate(model, X, y, k=5, epochs=8000, learning_rate=0.01, batch_size=10, method=method)
+        print(f"layer:{layers} train complete")
+        utils.plot_decision_boundary(X, y, model, layers, method)
+        models.append(model)
+        results.append((layers, metrics))
+        
+    # 绘制结果
+    utils.plot_loss(models, layers_list, "Classifier", method)
 
-
-# 训练和评估 MLP 使用不同的超参数
-# layers_list = [[2, 10, 1], [2, 20, 1], [2, 10, 10, 1]]
-layers_list = [[2, 10, 10, 1]]
-best_score = 0
-best_model = None
-best_metrics = None
-
-for layers in layers_list:
-    model = MLP(layers)
-    metrics = cross_validate(model, X, y, k=5, epochs=2000, learning_rate=0.1, batch_size=10, method='MBGD')
-    if metrics['accuracy'] > best_score:
-        best_score = metrics['accuracy']
-        best_model = model
-        best_metrics = metrics
-
-# 展示结果
-print(f"最佳模型层数: {best_model.layers}")
-print(f"交叉验证得分: {best_metrics}")
-
-# 绘制分类结果
-plot_decision_boundary(best_model, X, y)
-# plt.scatter(X[:, 0], X[:, 1], c=y.flatten(), cmap='viridis')
-# plt.title('数据集')
-# plt.show()
+    utils.LOG_RESULTS(results,method)

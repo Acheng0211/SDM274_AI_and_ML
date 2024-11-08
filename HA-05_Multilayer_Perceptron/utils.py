@@ -2,29 +2,21 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.datasets import make_moons
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+import os
 
-def generate_data():
-    # 生成数据集
-    np.random.seed(42)
-    # 定义数据集的大小
-    dataset_size = 10
-    # 生成随机的x和y坐标
-    x = np.random.uniform(-5, 5, dataset_size)
-    y = np.random.uniform(-5, 5, dataset_size)
-    # 生成颜色标签:红色和绿色
-    colors = np.random.choice(['red', 'green'], dataset_size)
-
-    # 创建一个DataFrame来保存数据集
-    data = pd.DataFrame({
-        'color': colors,
-        'x': x,
-        'y': y,
-    })
-    # 显示数据集的前几行
-    print(data.head())
-    save_path = './data'
-    # 保存数据集为CSV文件（如果需要）
-    data.to_csv(save_path + '/' + 'color_dataset.csv', index=False)
+def generate_data(mission):
+    if mission == "Classifier":
+        X, y = make_moons(n_samples=500, noise=0.3, random_state=42)
+        y = y.reshape(-1, 1)
+        y_raw = 0
+    elif mission == "Nonlinear":
+        X = np.linspace(0, 1, 100).reshape(-1, 1)
+        y_raw = np.sin(2 * np.pi * X) + 0.1 * np.random.randn(*X.shape)
+        y = np.round(y_raw) # ensure y is discrete
+    return X, y, y_raw
 
 def generate_dataset():
     np.random.seed(3407)
@@ -33,7 +25,6 @@ def generate_dataset():
     dataset = np.vstack([class_1, class_2])
     X, y = dataset[:,:2], dataset[:,2]
     return X, y
-
 
 def load_data(file_name):
     # 读取数据集
@@ -85,8 +76,81 @@ def split_data(X, y, test_size=0.3, val_size = 0.2, random_state = 42):
 
     return X_train, X_val, X_test, y_train.reshape(-1,1), y_val.reshape(-1,1),y_test.reshape(-1,1)
 
+def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=None, gd='MBGD'):
+    kf = KFold(n_splits=k)
+    scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
+    for train_index, val_index in kf.split(X):
+        X_train, X_val = X[train_index], X[val_index]
+        y_train, y_val = y[train_index], y[val_index]
+        model.train(X_train, y_train, epochs, learning_rate, batch_size, gd)
+        predictions = np.round(model.predict(X_val))
+        scores['accuracy'].append(accuracy_score(y_val, predictions))
+        scores['recall'].append(recall_score(y_val, predictions, average='weighted'))
+        scores['precision'].append(precision_score(y_val, predictions, average='weighted'))
+        scores['f1'].append(f1_score(y_val, predictions, average='weighted'))
+    return {metric: np.mean(values) for metric, values in scores.items()}
 
-# if __name__ == '__main__':
-#     X,y= generate_dataset()
-#     plt.scatter(X[:, 0], X[:, 1], c=y, cmap='viridis')
+def plot_nonliear(X, y, models, layers_list, gd):
+    plt.figure()
+    plt.scatter(X, y, label='raw data')
+    for model, layers in zip(models, layers_list):
+        plt.plot(X, model.predict(X), label=f'Model {layers}')
+    plt.title(f'MLP_Nonlinear_Approximation_{gd}')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.legend()
+    plt.savefig(os.path.join('./output', f'MLP_Nonlinear_Approximation_{gd}.png'))
+    plt.show()
+
+def plot_decision_boundary(X, y, models, layers_list, gd):
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+                         np.arange(y_min, y_max, 0.01))   
+    for model, layers in zip(models, layers_list):
+        plt.figure()
+        plt.scatter(X[:, 0], X[:, 1], c=y.flatten(), edgecolors='k', marker='o', cmap='viridis')
+        Z = np.round(model.predict(np.c_[xx.ravel(), yy.ravel()]))
+        Z = Z.reshape(xx.shape)
+        plt.contourf(xx, yy, Z, alpha=0.8, cmap='viridis', label=f'Model {layers}')
+        plt.title(f'MLP_Decision_Boundary_{gd}')
+        plt.legend()
+        # plt.savefig(os.path.join('./output', f'MLP_Decision_Boundary_{gd}_{layers}.png'))
+        plt.show()
+
+# def plot_decision_boundary(X, y, model, layers, gd):
+#     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+#     y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+#     xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.01),
+#                          np.arange(y_min, y_max, 0.01))
+#     Z = np.round(model.predict(np.c_[xx.ravel(), yy.ravel()]))
+#     Z = Z.reshape(xx.shape)   
+#     plt.figure()
+#     plt.scatter(X[:, 0], X[:, 1], c=y.flatten(), edgecolors='k', marker='o', cmap='viridis')
+#     # plt.plot(X, model.predict(X), label=f'Model {layers}')
+#     plt.contourf(xx, yy, Z, alpha=0.8, cmap='viridis')
+#     plt.title(f'MLP_Decision_Boundary_{gd}')
+#     plt.legend()
+#     plt.savefig(os.path.join('./output', f'MLP_Decision_Boundary_{gd}_{layers}.png'))
 #     plt.show()
+
+def plot_loss(models, layers_list, mission, gd):
+    plt.figure(figsize=(10, 6))
+    for model, layers in zip(models, layers_list):
+        plt.plot(model.loss, label=f'Model {layers}')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    if mission == "Nonlinear":
+        plt.title(f'MLP_Nonlinear_Approximation_loss_{gd}')
+        plt.savefig(os.path.join('./output', f'MLP_Nonlinear_Approximation_loss_{gd}.png'))
+    elif mission == "Classifier":
+        plt.title(f'MLP_Classifier_loss_{gd}')
+        plt.savefig(os.path.join('./output', f'MLP_Classifier_loss_{gd}.png'))
+    plt.show()
+
+def LOG_RESULTS(results, gd):
+    print(f"Update method: {gd}")
+    for layers, metrics in results:
+        print(f"model: {layers}, evaluation: {metrics}")
+    

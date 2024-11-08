@@ -12,10 +12,17 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "HW05 test.py debug",
+            "name": "HW05 nonlinear.py debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "./HA-05_Multilayer_Perceptron/my_test.py",
+            "program": "./HA-05_Multilayer_Perceptron/nonlinear.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "HW05 classifier.py debug",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./HA-05_Multilayer_Perceptron/classifier.py",
             "console": "integratedTerminal"
         }
     ]
