@@ -5,25 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "HW03-04 train.py debug",
+            "name": "HW06 train.py debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "./HA-03&04_Classification_and_Logistic_Regression/train.py",
+            "program": "./HA-06_kNN/train.py",
             "console": "integratedTerminal"
         },
-        {
-            "name": "HW05 nonlinear.py debug",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "./HA-05_Multilayer_Perceptron/nonlinear.py",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "HW05 classifier.py debug",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "./HA-05_Multilayer_Perceptron/classifier.py",
-            "console": "integratedTerminal"
-        }
     ]
 }

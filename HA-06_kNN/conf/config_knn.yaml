@@ -1,0 +1,18 @@
+name: "knn"
+dataset_path: "./data/wdbc.data" 
+wandb_on_off: false          
+k_max : 10
+
+defaults:  
+  - _self_  
+  - override hydra/hydra_logging: disabled  
+  - override hydra/job_logging: disabled  
+  
+hydra:  
+  output_subdir: null  
+  run:  
+    dir: .
+
+wandb:
+  project: "knn"
+  # dir: "./outputs"
