@@ -12,6 +12,8 @@ ___
   - [Multi-layer Perceptron(MLP)](/HA-05_Multilayer_Perceptron/MLP.md)
 - **Nearest Neighbors**
   - [k-Nearest Neighbors(knn)](/HA-06_kNN/knn.md)
+- **Decision Tree**
+  - [Decision Tree](/HA-07_Decision_Tree/DT.md)
 
 
   ___
