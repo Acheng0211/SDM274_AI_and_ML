@@ -49,17 +49,17 @@ def load_and_process_data(file_name, features_to_remove=None):
     # 读取数据集，并将第一行作为列名
     data_raw = pd.read_csv(file_name)
 
-    # 将第一列 'id' 保存为 X
-    X = data_raw.iloc[:, 0].values
+    # 将machine failure保存为label
+    y = data_raw.iloc[:, 8].values
 
-    # 将其余特征保存为 y
-    y = data_raw.iloc[:, 1:].values
+    # 将有效特征保存为x
+    X = data_raw.iloc[:, 2:8].values
 
     # 如果提供了要删除的特征标签，删除这些特征
     if features_to_remove:
-        y = y.drop(columns=features_to_remove)
+        X = X.drop(columns=features_to_remove)
 
-    return X, y
+    return X, y.reshape(-1,1)
 
 def split_data(X, y, test_size=0.3, val_size = 0.2, random_state = 42):
     # 划分训练集和测试集，这里我们按照70%训练集，30%测试集的比例来划分

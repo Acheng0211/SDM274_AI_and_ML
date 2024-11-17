@@ -1,6 +1,7 @@
 import numpy as np 
 import wandb
 import matplotlib as plt
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 
 class LinearRegression:
     def __init__(self, n_feature = 1, lr=1e-5, epoch=5000, batch_size=10, tol = 1e-5, gd = None):
@@ -8,8 +9,8 @@ class LinearRegression:
         self.epoch = epoch    # 迭代次数
         self.batch_size = batch_size        # 批量大小
         self.tol = tol          # 收敛阈值
-        self.W = np.random.randn(n_feature + 1) * 0.05    # 权重
-        self.losses = []
+        self.W = (np.random.randn(n_feature + 1) * 0.05).reshape(-1,1)    # 权重
+        self.loss = []
         self.gd = gd
         self.norm_params = None  # 用于保存归一化参数
 
@@ -32,7 +33,7 @@ class LinearRegression:
                 self._mbgd_update(X_norm, y)
             if i % 100 == 0:
                 loss = self._mse_loss(y, np.dot(X_norm,self.W))
-                self.losses.append(loss)
+                self.loss.append(loss)
                 print(f"for {i} iteration, the loss is {loss}")
         return self.W
 
@@ -42,16 +43,9 @@ class LinearRegression:
     def _mse_loss(self, y_true, y_pred):
         return np.mean((y_true - y_pred) ** 2)  # 计算均方误差损失
         
-    def _gradient(self, X, y, y_pred):
-        # if isinstance(y, np.ndarray):
-        #     delta_y = (y_pred-y).reshape((y.shape[0], 1))
-        #     return np.mean(2 * delta_y.T @ X)
-        # else:
-        #     delta_y = y_pred-y
-        #     return (2 * delta_y.T * X).reshape((self.W.shape[0]))
-        
+    def _gradient(self, X, y, y_pred):  
         grad = 1 / X.shape[0] * np.dot(X.T, (y_pred - y))
-        grad = grad.reshape(self.W.shape)
+        # grad = grad.reshape(self.W.shape)
         return grad
 
     def _sgd_update(self, X, y): #epoch=2750
@@ -68,10 +62,8 @@ class LinearRegression:
     def _mbgd_update(self, X, y): #epoch=10000
         pred = self._predict(X)
         indices = np.random.choice(y.shape[0], self.batch_size, replace=False)
-        # grad = np.zeros(self.W.shape[0])
-        # for i in indices:
-        #     grad += self._gradient(X[i], y[i], pred[i])
         grad = self._gradient(X[indices], y[indices], pred[indices])
+        grad = np.asarray(grad, dtype=np.float64)
         self.W -= self.lr * grad/self.batch_size
 
     def predict(self, X):
@@ -79,8 +71,20 @@ class LinearRegression:
         X_norm = self.min_max_normalization(X, self.X_norm_params)
         return self._predict(X_norm)
 
-    # def min_max_normalization(self, X):
-    #     return (X - X.min(axis=0)) / (X.max(axis=0) - X.min(axis=0))  # 最小-最大归一化
+    def _evaluate(self, X_test, y_test):
+        scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
+        X_test = np.c_[X_test, np.ones(X_test.shape[0])]
+        X_test = X_test.astype(np.int64)
+        print(f"X_test dtype: {X_test.dtype}")
+        predictions = np.round(self._predict(X_test))
+        predictions = predictions.astype(np.int64)
+        print(f"y_test dtype: {y_test.dtype}, predictions dtype: {predictions.dtype}")
+        np.savetxt("compare.csv", np.concatenate((y_test, predictions), axis=1), delimiter=", ")
+        scores['accuracy'].append(accuracy_score(y_test, predictions))
+        scores['recall'].append(recall_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['precision'].append(precision_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['f1'].append(f1_score(y_test, predictions, average='weighted', zero_division=0))
+        return {metric: np.mean(values) for metric, values in scores.items()}
     
     def min_max_normalization(self, X, params=None):
         if params is None:
@@ -95,26 +99,6 @@ class LinearRegression:
             X_mean, X_std = params
         return (X - X_mean) / X_std
     
-    def evaluate(self, X_test, y_test):
-        TP,FP,FN,TN = 0,0,0,0
-        X_test = self._preprocess_data(X_test)
-        for i in range(len(X_test)):
-            y = self._predict(X_test[i])
-            if y == 1 and y_test[i] == 1:
-                TP += 1
-            elif y == 1 and y_test[i] == -1:
-                FP += 1
-            elif y == -1 and y_test[i] == 1:
-                FN += 1
-            elif y == -1 and y_test[i] == -1:
-                TN += 1
-        # print(TP, FP, FN, TN)
-        accuracy = (TP + TN) / (TP + FP + FN + TN)
-        recall = TP / (TP + FN)
-        precision = TP / (TP + FP)
-        F1 = 2 * precision * recall / (precision + recall)
-        print(f"evaluation results: accuracy: {accuracy}, recall: {recall}, precision: {precision}, F1: {F1}")
-
 class Perceptron:
     def __init__(self, n_feature = 1, epoch = 2000, lr = 0.01, tol = None, wandb = False, gd = None):
         self.n_feature = n_feature
@@ -136,9 +120,11 @@ class Perceptron:
         return X_
     
     def _loss(self, y, y_pred):
-        loss = y_pred * y
-        loss_all = -loss[loss < 0]
-        return np.sum(loss_all)
+        # loss = y_pred * y
+        # loss_all = -loss[loss < 0]
+        # return np.sum(loss_all)
+        loss = np.where(y * y_pred < 0, - y_pred * y, 0)
+        return np.sum(loss)
 
     def _gradient(self, X, y, y_pred):
         batch_size = X.shape[0]
@@ -162,6 +148,8 @@ class Perceptron:
         for epoch in range(self.epoch):
             y_pred = self._predict(X)
             loss = self._loss(y, y_pred)
+            if epoch % 100 == 0:            
+                print(f'Epoch {epoch}, Loss: {loss}')
             self.loss.append(loss)
             if self.wandb:
                 wandb.log({"loss": loss})
@@ -179,8 +167,10 @@ class Perceptron:
             if self.gd == 'SGD':
                 i = np.random.randint(0, len(X))
                 grad = self._gradient(np.expand_dims(X[i], axis=0), np.expand_dims(y_pred[i], axis=0), np.expand_dims(y[i], axis=0))
-            else: 
-                grad = self._gradient(X, y_pred, y)
+            elif self.gd == 'MBGD':
+                batch_size = 10
+                idx = np.random.choice(y.shape[0], batch_size, replace=False)
+                grad = self._gradient(X[idx], y[idx], y_pred[idx]) 
             self.W -= self.lr * grad        
             if break_out:
                 break_out = False
@@ -188,6 +178,17 @@ class Perceptron:
 
     def _predict(self, X):
         return np.sign(X @ self.W)
+
+    def _evaluate(self, X_test, y_test):
+        scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
+        X_test = self._preprocess_data(X_test)
+        predictions = np.round(self._predict(X_test))
+        np.savetxt("compare1.csv", np.concatenate((y_test, predictions), axis=1), delimiter=", ")
+        scores['accuracy'].append(accuracy_score(y_test, predictions))
+        scores['recall'].append(recall_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['precision'].append(precision_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['f1'].append(f1_score(y_test, predictions, average='weighted', zero_division=0))
+        return {metric: np.mean(values) for metric, values in scores.items()}
 
     def evaluate(self, X_test, y_test):
         TP,FP,FN,TN = 0,0,0,0
@@ -268,6 +269,8 @@ class LogisticRegression:
             y_pred = self._predict_probablity(X)
             loss = self._loss(y, y_pred)
             self.loss.append(loss)
+            if epoch % 100 == 0:            
+                print(f'Epoch {epoch}, Loss: {loss}')
             loss_error = np.abs(loss - self.best_loss)
             if self.wandb:
                 wandb.log({"loss": loss})
@@ -301,6 +304,17 @@ class LogisticRegression:
         X = self._preprocess_data(X)
         y_pred = self._predict_probablity(X)
         return np.where(y_pred>=0.5,1,0)
+    
+    def _evaluate(self, X_test, y_test):
+        scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
+        # X_test = self._preprocess_data(X_test)
+        predictions = np.round(self._predict(X_test))
+        np.savetxt("compare2.csv", np.concatenate((y_test, predictions), axis=1), delimiter=", ")
+        scores['accuracy'].append(accuracy_score(y_test, predictions))
+        scores['recall'].append(recall_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['precision'].append(precision_score(y_test, predictions, average='weighted', zero_division=0))
+        scores['f1'].append(f1_score(y_test, predictions, average='weighted', zero_division=0))
+        return {metric: np.mean(values) for metric, values in scores.items()}
 
     def evaluate(self, X_test, y_test):
         TP,FP,FN,TN = 0,0,0,0
@@ -345,6 +359,7 @@ class MLP:
             self.biases.append(np.zeros((1, self.layers[i + 1])))
 
     def sigmoid(self, x):
+        x = np.asarray(x, dtype=np.float64)  # 确保输入是数值类型
         return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
@@ -361,9 +376,12 @@ class MLP:
         return self.a[-1]
 
     def backward_propagation(self, X, y, learning_rate):
+        self.a[-1] = np.asarray(self.a[-1], dtype=np.float64)
+        y = np.asarray(y, dtype=np.float64)
         m = y.shape[0]
         self.deltas = [self.a[-1] - y]
         for i in range(len(self.a) - 2, 0, -1):
+            # fixed by y.reshape(-1,1)
             delta = np.dot(self.deltas[-1], self.weights[i].T) * self.sigmoid_derivative(self.a[i])
             self.deltas.append(delta)
         self.deltas.reverse()
@@ -387,6 +405,8 @@ class MLP:
             for start in range(0, X.shape[0], batch_size):
                 end = start + batch_size
                 X_batch, y_batch = X[indices[start:end]], y[indices[start:end]]
+                X_batch = np.asarray(X_batch, dtype=np.float64)
+                y_batch = np.asarray(y_batch, dtype=np.float64)
                 self.forward_propagation(X_batch)
                 self.backward_propagation(X_batch, y_batch, learning_rate)
             loss = np.mean((self.forward_propagation(X) - y) ** 2)

@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "HW06 train.py debug",
+            "name": "mideterm debug",
             "type": "debugpy",
             "request": "launch",
-            "program": "./HA-06_kNN/train.py",
-            "console": "integratedTerminal"
-        },
+            "program": "./Project_midterm/train.py",
+            "console": "integratedTerminal"      
+        }
     ]
 }
