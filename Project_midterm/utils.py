@@ -46,18 +46,20 @@ def classify_data(data):
     return X, y
 
 def load_and_process_data(file_name, features_to_remove=None):
-    # 读取数据集，并将第一行作为列名
+    # read the data
     data_raw = pd.read_csv(file_name)
+    # handle missing values using the mean of the column
+    #data_raw.fillna(data_raw.mean(), inplace=True)
 
-    # 将machine failure保存为label
-    y = data_raw.iloc[:, 8].values
+    # extract features and target variable
+    features = ['Air temperature [K]', 'Process temperature [K]', 'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]']
+    target = 'Machine failure'
+    X = data_raw[features].values
+    y = data_raw[target].values
 
-    # 将有效特征保存为x
-    X = data_raw.iloc[:, 2:8].values
-
-    # 如果提供了要删除的特征标签，删除这些特征
+    # apply delete features option
     if features_to_remove:
-        X = X.drop(columns=features_to_remove)
+        X = np.delete(X, features_to_remove, axis=1)
 
     return X, y.reshape(-1,1)
 
