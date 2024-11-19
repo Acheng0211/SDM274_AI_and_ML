@@ -88,9 +88,9 @@ def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=
         model.train(X_train, y_train, epochs, learning_rate, batch_size, gd)
         predictions = np.round(model.predict(X_val))
         scores['accuracy'].append(accuracy_score(y_val, predictions))
-        scores['recall'].append(recall_score(y_val, predictions, average='weighted'))
-        scores['precision'].append(precision_score(y_val, predictions, average='weighted'))
-        scores['f1'].append(f1_score(y_val, predictions, average='weighted'))
+        scores['recall'].append(recall_score(y_val, predictions, average='weighted', zero_division=0))
+        scores['precision'].append(precision_score(y_val, predictions, average='weighted', zero_division=0))
+        scores['f1'].append(f1_score(y_val, predictions, average='weighted', zero_division=0))
     return {metric: np.mean(values) for metric, values in scores.items()}
 
 def plot_nonliear(X, y, models, layers_list, gd):

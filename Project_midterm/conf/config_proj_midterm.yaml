@@ -8,7 +8,7 @@ tol: 1e-6
 gd: "MBGD"   # available: "SGD" "MBGD"
 input_size : 1 # Nonlinear, 2 when Classifier
 batch_size: 10
-layers_list : [[input_size, 10, 10, 20, 1]]
+layers_list : [[input_size, 10, 1]]
 k : 5 # k-fold
 
 

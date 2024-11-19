@@ -2,7 +2,7 @@ name: "LogisticRegression"
 # dataset_path: "/home/hgj/SDM274/HA-03&04_Classification_and_Logistic_Regression/data/wine.data" #ubuntu
 dataset_path: "./data/wine.data" #windows
 wandb_on_off: false        
-lr: 1e-45
+lr: 1e-4
 epoch: 1000
 tol: 1e-6
 gd: "SGD"   # available: "SGD" "MBGD"

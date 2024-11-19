@@ -74,11 +74,13 @@ class LinearRegression:
     def _evaluate(self, X_test, y_test):
         scores = {'accuracy': [], 'recall': [], 'precision': [], 'f1': []}
         X_test = np.c_[X_test, np.ones(X_test.shape[0])]
-        X_test = X_test.astype(np.int64)
-        print(f"X_test dtype: {X_test.dtype}")
-        predictions = np.round(self._predict(X_test))
-        predictions = predictions.astype(np.int64)
-        print(f"y_test dtype: {y_test.dtype}, predictions dtype: {predictions.dtype}")
+        # X_test = X_test.astype(np.int64)
+        # print(f"X_test dtype: {X_test.dtype}")
+        # predictions = np.round(self._predict(X_test))
+        predictions = self._predict(X_test)
+        threshold = 0.5
+        predictions = (predictions >= threshold).astype(np.int64)
+        # print(f"y_test dtype: {y_test.dtype}, predictions dtype: {predictions.dtype}")
         np.savetxt("compare.csv", np.concatenate((y_test, predictions), axis=1), delimiter=", ")
         scores['accuracy'].append(accuracy_score(y_test, predictions))
         scores['recall'].append(recall_score(y_test, predictions, average='weighted', zero_division=0))
@@ -123,8 +125,10 @@ class Perceptron:
         # loss = y_pred * y
         # loss_all = -loss[loss < 0]
         # return np.sum(loss_all)
-        loss = np.where(y * y_pred < 0, - y_pred * y, 0)
-        return np.sum(loss)
+        # loss = np.where(y * y_pred < 0, - y_pred * y, 0)
+        # return np.sum(loss)
+        errors = y - y_pred
+        return np.mean(errors ** 2)
 
     def _gradient(self, X, y, y_pred):
         batch_size = X.shape[0]
@@ -146,35 +150,37 @@ class Perceptron:
         epoch_no_improve = 0
         X = self._preprocess_data(X)
         for epoch in range(self.epoch):
-            y_pred = self._predict(X)
-            loss = self._loss(y, y_pred)
+            # if self.gd == 'SGD':
+            #     i = np.random.randint(0, len(X))
+            #     y_pred = self._predict(X[i])
+            #     grad = self._gradient(np.expand_dims(X[i], axis=0), np.expand_dims(y_pred[i], axis=0), np.expand_dims(y[i], axis=0))
+            #     loss = self._loss(y[i], y_pred)
+            # elif self.gd == 'MBGD':
+            batch_size = X.shape[0]
+            idx = np.random.choice(y.shape[0], batch_size, replace=False)
+            y_pred = self._predict(X[idx])
+            grad = self._gradient(X[idx], y[idx], y_pred[idx]) 
+            loss = self._loss(y[idx], y_pred)
+            self.W -= self.lr * grad
             if epoch % 100 == 0:            
                 print(f'Epoch {epoch}, Loss: {loss}')
             self.loss.append(loss)
-            if self.wandb:
-                wandb.log({"loss": loss})
-            if loss < self.best_loss - self.tol:
-                self.best_loss = loss
-                epoch_no_improve = 0
-            elif np.abs(loss - self.best_loss) < self.tol:
-                epoch_no_improve += 1
-                if epoch_no_improve >= self.patience:
-                    print(f"Early stopping triggered at {epoch} due to the no improvement in loss")
-                    break_out = True
-                    break
-                else:
-                    epoch_no_improve = 0
-            if self.gd == 'SGD':
-                i = np.random.randint(0, len(X))
-                grad = self._gradient(np.expand_dims(X[i], axis=0), np.expand_dims(y_pred[i], axis=0), np.expand_dims(y[i], axis=0))
-            elif self.gd == 'MBGD':
-                batch_size = 10
-                idx = np.random.choice(y.shape[0], batch_size, replace=False)
-                grad = self._gradient(X[idx], y[idx], y_pred[idx]) 
-            self.W -= self.lr * grad        
-            if break_out:
-                break_out = False
-                break
+            # if self.wandb:
+            #     wandb.log({"loss": loss})
+            # if loss < self.best_loss - self.tol:
+            #     self.best_loss = loss
+            #     epoch_no_improve = 0
+            # elif np.abs(loss - self.best_loss) < self.tol:
+            #     epoch_no_improve += 1
+            #     if epoch_no_improve >= self.patience:
+            #         print(f"Early stopping triggered at {epoch} due to the no improvement in loss")
+            #         break_out = True
+            #         break
+            #     else:
+            #         epoch_no_improve = 0        
+            # if break_out:
+            #     break_out = False
+            #     break
 
     def _predict(self, X):
         return np.sign(X @ self.W)
@@ -355,7 +361,6 @@ class MLP:
     def init_weights(self):
         for i in range(len(self.layers) - 1):
             self.weights.append(np.random.randn(self.layers[i], self.layers[i + 1]) * np.sqrt(2 / self.layers[i]))
-            # self.weights.append(np.random.randn(self.layers[i], self.layers[i + 1]) * 0.1)
             self.biases.append(np.zeros((1, self.layers[i + 1])))
 
     def sigmoid(self, x):
@@ -389,15 +394,16 @@ class MLP:
             self.weights[i] -= learning_rate * np.dot(self.a[i].T, self.deltas[i]) / m
             self.biases[i] -= learning_rate * np.sum(self.deltas[i], axis=0, keepdims=True) / m
 
-    def train(self, X, y, epochs, learning_rate, batch_size=None, gd='SGD'):
+    def train(self, X, y, epochs, learning_rate, batch_size=None, gd='MBGD'):
         self.gd = gd
-        if gd not in ['SGD', 'MBGD']:
-            raise ValueError("gd should be either 'SGD' or 'MBGD'")
+        batch_size = X.shape[0]
+        # if gd not in ['SGD', 'MBGD']:
+        #     raise ValueError("gd should be either 'SGD' or 'MBGD'")
         
-        if gd == 'SGD':
-            batch_size = 1
-        elif gd == 'MBGD' and batch_size is None:
-            batch_size = X.shape[0]
+        # if gd == 'SGD':
+        #     batch_size = 1
+        # elif gd == 'MBGD' and batch_size is None:
+        #     batch_size = X.shape[0]
         
         for epoch in range(epochs):
             indices = np.arange(X.shape[0])
