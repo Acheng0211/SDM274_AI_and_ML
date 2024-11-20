@@ -6,8 +6,6 @@ from sklearn.datasets import make_moons
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 import os
-from sklearn.feature_selection import mutual_info_classif
-import seaborn as sns
 
 def generate_data(mission):
     if mission == "Classifier":
@@ -30,14 +28,27 @@ def generate_dataset():
 
 def load_data(file_name):
     # 读取数据集
-    column_names = ['UDI'] + [f'feature_{i}' for i in range(13)]  
+    column_names = ['class_label'] + [f'feature_{i}' for i in range(13)]  
     data_raw = pd.read_csv(file_name, header=None, names=column_names)
+
+    # 显示原始数据集的类别分布
+    # print("Original dataset class distribution:")
+    # print(data_raw['class_label'].value_counts())
 
     return data_raw
 
 def filter(data):
     # 删除 class_label = 3 的所有行
     data_filtered = data[data['class_label'] != 3]
+
+    # 显示新数据集的类别分布
+    # print("\nNew dataset class distribution:")
+    # print(data_filtered['class_label'].value_counts())
+
+    # # 检查新数据集的形状
+    # print("\nOriginal dataset shape:", data.shape)
+    # print("New dataset shape:", data_filtered.shape)
+
     return data_filtered
 
 def classify_data(data):
@@ -47,51 +58,10 @@ def classify_data(data):
 
     return X, y
 
-def load_and_process_data(file_name, features_to_remove=None):
-    # read the data
-    data_raw = pd.read_csv(file_name)
-    # handle missing values using the mean of the column
-    data_raw.fillna(data_raw.mean(), inplace=True)
-
-    # extract features and target variable
-    features = ['Air temperature [K]', 'Process temperature [K]', 'Rotational speed [rpm]', 'Torque [Nm]', 'Tool wear [min]']
-    target = 'Machine failure'
-    X = data_raw[features]
-    y = data_raw[target]
-
-    correlation_matrix = calculate_correlation_matrix(X, y)
-    plot_correlation_matrix(correlation_matrix)
-
-    # apply delete features option
-    if features_to_remove:
-        X = np.delete(X, features_to_remove, axis=1)
-
-    return X.values, y.values.reshape(-1,1)
-
-def calculate_correlation_matrix(X, y):
-    # 计算互信息
-    mi = mutual_info_classif(X, y)
-    mi = pd.Series(mi, index=X.columns, name="Mutual Information")
-
-    # 计算相关矩阵
-    correlation_matrix = X.corrwith(y)
-    correlation_matrix = pd.DataFrame(correlation_matrix, columns=["Correlation"])
-
-    # 合并互信息和相关矩阵
-    result = pd.concat([correlation_matrix, mi], axis=1)
-    result.columns = ["Correlation", "Mutual Information"]
-
-    return result
-
-def plot_correlation_matrix(correlation_matrix):
-    sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm")
-    plt.title("Feature Correlation with Machine Failure")
-    # plt.show()
-
 def split_data(X, y, test_size=0.3, val_size = 0.2, random_state = 42):
     # 划分训练集和测试集，这里我们按照70%训练集，30%测试集的比例来划分
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
-    # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=val_size, random_state=random_state)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=val_size, random_state=random_state)
     #Perceptron时-1, LogisticRegression时0
     # y_train[y_train == 2] = -1
     # y_test[y_test == 2] = -1
@@ -104,7 +74,7 @@ def split_data(X, y, test_size=0.3, val_size = 0.2, random_state = 42):
     # print("Training set shape:", X_train.shape)
     # print("Test set shape:", X_test.shape)
 
-    return X_train, X_test, y_train.reshape(-1,1), y_test.reshape(-1,1)
+    return X_train, X_val, X_test, y_train.reshape(-1,1), y_val.reshape(-1,1),y_test.reshape(-1,1)
 
 def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=None, gd='MBGD'):
     kf = KFold(n_splits=k)
@@ -115,9 +85,9 @@ def cross_validate(model, X, y, k=5, epochs=100, learning_rate=0.01, batch_size=
         model.train(X_train, y_train, epochs, learning_rate, batch_size, gd)
         predictions = np.round(model.predict(X_val))
         scores['accuracy'].append(accuracy_score(y_val, predictions))
-        scores['recall'].append(recall_score(y_val, predictions, average='weighted', zero_division=0))
-        scores['precision'].append(precision_score(y_val, predictions, average='weighted', zero_division=0))
-        scores['f1'].append(f1_score(y_val, predictions, average='weighted', zero_division=0))
+        scores['recall'].append(recall_score(y_val, predictions, average='weighted'))
+        scores['precision'].append(precision_score(y_val, predictions, average='weighted'))
+        scores['f1'].append(f1_score(y_val, predictions, average='weighted'))
     return {metric: np.mean(values) for metric, values in scores.items()}
 
 def plot_nonliear(X, y, models, layers_list, gd):

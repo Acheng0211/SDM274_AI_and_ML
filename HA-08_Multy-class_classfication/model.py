@@ -11,10 +11,10 @@ class MLP:
     def init_weights(self):
         for i in range(len(self.layers) - 1):
             self.weights.append(np.random.randn(self.layers[i], self.layers[i + 1]) * np.sqrt(2 / self.layers[i]))
+            # self.weights.append(np.random.randn(self.layers[i], self.layers[i + 1]) * 0.1)
             self.biases.append(np.zeros((1, self.layers[i + 1])))
 
     def sigmoid(self, x):
-        # x = np.asarray(x, dtype=np.float64)  # 确保输入是数值类型
         return 1 / (1 + np.exp(-x))
 
     def sigmoid_derivative(self, x):
@@ -31,12 +31,9 @@ class MLP:
         return self.a[-1]
 
     def backward_propagation(self, X, y, learning_rate):
-        self.a[-1] = np.asarray(self.a[-1], dtype=np.float64)
-        y = np.asarray(y, dtype=np.float64)
         m = y.shape[0]
         self.deltas = [self.a[-1] - y]
         for i in range(len(self.a) - 2, 0, -1):
-            # fixed by y.reshape(-1,1)
             delta = np.dot(self.deltas[-1], self.weights[i].T) * self.sigmoid_derivative(self.a[i])
             self.deltas.append(delta)
         self.deltas.reverse()
@@ -44,9 +41,8 @@ class MLP:
             self.weights[i] -= learning_rate * np.dot(self.a[i].T, self.deltas[i]) / m
             self.biases[i] -= learning_rate * np.sum(self.deltas[i], axis=0, keepdims=True) / m
 
-    def train(self, X, y, epochs, learning_rate, batch_size=None, gd='MBGD'):
+    def train(self, X, y, epochs, learning_rate, batch_size=None, gd='SGD'):
         self.gd = gd
-        batch_size = X.shape[0]
         if gd not in ['SGD', 'MBGD']:
             raise ValueError("gd should be either 'SGD' or 'MBGD'")
         
@@ -61,8 +57,6 @@ class MLP:
             for start in range(0, X.shape[0], batch_size):
                 end = start + batch_size
                 X_batch, y_batch = X[indices[start:end]], y[indices[start:end]]
-                X_batch = np.asarray(X_batch, dtype=np.float64)
-                y_batch = np.asarray(y_batch, dtype=np.float64)
                 self.forward_propagation(X_batch)
                 self.backward_propagation(X_batch, y_batch, learning_rate)
             loss = np.mean((self.forward_propagation(X) - y) ** 2)

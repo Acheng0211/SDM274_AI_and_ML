@@ -1,11 +1,13 @@
 name: "Project_midterm"
 dataset: './Project_midterm/data/ai4i2020.csv'
-wandb_on_off: false        
+wandb_on_off: false 
+lr_linear_regression: 1e-6       
 lr: 1e-2
-epoch: 8000
+epoch: 4000
+batch_size: 800
 tol: 1e-6
 gd: "MBGD"   # available: "SGD" "MBGD"
-hidden_layers : [10, 10, 20]
+hidden_layers : [10]
 k : 5 # k-fold
 
 
