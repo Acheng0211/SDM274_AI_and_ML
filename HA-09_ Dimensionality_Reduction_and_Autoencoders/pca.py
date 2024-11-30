@@ -1,36 +1,33 @@
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 
 def load_wine_data(file_path):
-    # 加载数据
     data = pd.read_csv(file_path, header=None)
-    X = data.iloc[:, 1:].values  # 特征
-    y = data.iloc[:, 0].values  # 标签
+    X = data.iloc[:, 1:].values 
+    y = data.iloc[:, 0].values 
 
-    # 标准化特征
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=0)
+
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
-    return X_scaled, y
+    return X_train_scaled, X_test_scaled, y_train, y_test
 
-def pca(X, n_components=2):
-    # 计算协方差矩阵
-    covariance_matrix = np.cov(X.T)
+def pca(X_train, X_test, n_components=2):
+    covariance_matrix = np.cov(X_train.T)
     
-    # 计算特征值和特征向量
     eigenvalues, eigenvectors = np.linalg.eig(covariance_matrix)
     
-    # 选择前 n 个主成分
     idx = np.argsort(eigenvalues)[::-1]
     eigenvectors = eigenvectors[:, idx]
     principal_components = eigenvectors[:, :n_components]
     
-    # 降维
-    X_pca = np.dot(X, principal_components)
+    X_pca = np.dot(X_train, principal_components)
     
-    # 重构数据
     X_reconstructed = np.dot(X_pca, principal_components.T)
     
     return X_pca, X_reconstructed
@@ -58,19 +55,15 @@ class LinearAutoencoder:
 
     def fit(self, X):
         for epoch in range(self.epochs):
-            # 前向传播
             encoded = self.sigmoid(np.dot(X, self.weights['encoder']) + self.biases['encoder'])
             decoded = self.sigmoid(np.dot(encoded, self.weights['decoder']) + self.biases['decoder'])
             
-            # 计算损失
             loss = np.mean((X - decoded) ** 2)
             
-            # 反向传播
             error = X - decoded
             d_decoder = error * self.sigmoid_derivative(decoded)
             d_encoder = np.dot(d_decoder, self.weights['decoder'].T) * self.sigmoid_derivative(encoded)
             
-            # 更新权重和偏置
             self.weights['decoder'] += self.learning_rate * np.dot(encoded.T, d_decoder)
             self.biases['decoder'] += self.learning_rate * np.sum(d_decoder, axis=0, keepdims=True)
             self.weights['encoder'] += self.learning_rate * np.dot(X.T, d_encoder)
@@ -118,23 +111,19 @@ class NonLinearAutoencoder:
 
     def fit(self, X):
         for epoch in range(self.epochs):
-            # 前向传播
             hidden = self.sigmoid(np.dot(X, self.weights['encoder_hidden']) + self.biases['encoder_hidden'])
             encoded = self.sigmoid(np.dot(hidden, self.weights['hidden_encoding']) + self.biases['hidden_encoding'])
             hidden_decoded = self.sigmoid(np.dot(encoded, self.weights['encoding_hidden']) + self.biases['encoding_hidden'])
             decoded = self.sigmoid(np.dot(hidden_decoded, self.weights['hidden_decoder']) + self.biases['hidden_decoder'])
             
-            # 计算损失
             loss = np.mean((X - decoded) ** 2)
             
-            # 反向传播
             error = X - decoded
             d_hidden_decoder = error * self.sigmoid_derivative(decoded)
             d_encoding_hidden = np.dot(d_hidden_decoder, self.weights['hidden_decoder'].T) * self.sigmoid_derivative(hidden_decoded)
             d_hidden_encoding = np.dot(d_encoding_hidden, self.weights['encoding_hidden'].T) * self.sigmoid_derivative(encoded)
             d_encoder_hidden = np.dot(d_hidden_encoding, self.weights['hidden_encoding'].T) * self.sigmoid_derivative(hidden)
             
-            # 更新权重和偏置
             self.weights['hidden_decoder'] += self.learning_rate * np.dot(hidden_decoded.T, d_hidden_decoder)
             self.biases['hidden_decoder'] += self.learning_rate * np.sum(d_hidden_decoder, axis=0, keepdims=True)
             self.weights['encoding_hidden'] += self.learning_rate * np.dot(encoded.T, d_encoding_hidden)
@@ -161,33 +150,27 @@ class NonLinearAutoencoder:
         return decoded
 
 def reconstruction_error(X, X_reconstructed):
-    return np.mean((X - X_reconstructed) ** 2)
+    return np.mean((X[:,:X_reconstructed.shape[1]] - X_reconstructed) ** 2)
 
 if __name__ == '__main__':
-        
-    file_path = './HA-09_ Dimensionality_Reduction_and_Autoencoders/data/wine.data'
-    X, y = load_wine_data(file_path)
-    X_pca, X_reconstructed_pca = pca(X)
 
-    # 可视化主成分
-    plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
+    file_path = './HA-09_ Dimensionality_Reduction_and_Autoencoders/data/wine.data'
+    X_train, X_test, y_train, y_test = load_wine_data(file_path)
+    X_pca, X_reconstructed_pca = pca(X_train, X_test)
+    plt.scatter(X_reconstructed_pca[:, 0], X_reconstructed_pca[:, 1], c=y_train)
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
     plt.title('PCA of Wine Dataset')
     plt.show()
 
     # 训练线性自编码器
-    input_dim = X.shape[1]
+    input_dim = X_train.shape[1]
     encoding_dim = 2
-    linear_autoencoder = LinearAutoencoder(input_dim, encoding_dim)
-    linear_autoencoder.fit(X)
-
-    # 重构数据
-    X_reconstructed_linear = linear_autoencoder.reconstruct(X)
-
-    # 可视化编码器输出
-    encoded_linear = linear_autoencoder.encode(X)
-    plt.scatter(encoded_linear[:, 0], encoded_linear[:, 1], c=y)
+    linear_autoencoder = LinearAutoencoder(input_dim, encoding_dim, learning_rate=0.01, epochs=80000)
+    linear_autoencoder.fit(X_train)
+    X_reconstructed_linear = linear_autoencoder.reconstruct(X_test)
+    encoded_linear = linear_autoencoder.encode(X_test)
+    plt.scatter(encoded_linear[:, 0], encoded_linear[:, 1], c=y_test)
     plt.xlabel('Encoded Feature 1')
     plt.ylabel('Encoded Feature 2')
     plt.title('Linear Autoencoder of Wine Dataset')
@@ -195,25 +178,22 @@ if __name__ == '__main__':
 
     # 训练非线性自编码器
     hidden_dim = 16
-    nonlinear_autoencoder = NonLinearAutoencoder(input_dim, encoding_dim, hidden_dim)
-    nonlinear_autoencoder.fit(X)
-
-    # 重构数据
-    X_reconstructed_nonlinear = nonlinear_autoencoder.reconstruct(X)
-
-    # 可视化编码器输出
-    encoded_nonlinear = nonlinear_autoencoder.encode(X)
-    plt.scatter(encoded_nonlinear[:, 0], encoded_nonlinear[:, 1], c=y)
+    nonlinear_autoencoder = NonLinearAutoencoder(input_dim, encoding_dim, hidden_dim, learning_rate=0.001, epochs=80000)
+    nonlinear_autoencoder.fit(X_train)
+    X_reconstructed_nonlinear = nonlinear_autoencoder.reconstruct(X_test)
+    encoded_nonlinear = nonlinear_autoencoder.encode(X_test)
+    plt.scatter(encoded_nonlinear[:, 0], encoded_nonlinear[:, 1], c=y_test)
     plt.xlabel('Encoded Feature 1')
     plt.ylabel('Encoded Feature 2')
     plt.title('Non-linear Autoencoder of Wine Dataset')
     plt.show()
 
     # 计算重构误差
-    error_pca = reconstruction_error(X, X_reconstructed_pca)
-    error_linear = reconstruction_error(X, X_reconstructed_linear)
-    error_nonlinear = reconstruction_error(X, X_reconstructed_nonlinear)
+    error_pca = reconstruction_error(X_train, X_reconstructed_pca)
+    error_linear = reconstruction_error(X_test, X_reconstructed_linear)
+    error_nonlinear = reconstruction_error(X_test, X_reconstructed_nonlinear)
 
     print(f'Reconstruction Error (PCA): {error_pca}')
     print(f'Reconstruction Error (Linear Autoencoder): {error_linear}')
     print(f'Reconstruction Error (Non-linear Autoencoder): {error_nonlinear}')
+
