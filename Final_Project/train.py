@@ -59,7 +59,7 @@ def plot_clusters(X, clusters, centroids, title):
     plt.ylabel('Feature 2')
     plt.title(title)
     plt.legend()
-    # plt.show()
+    plt.show()
 
 def plot_soft_clusters(X, responsibilities, centroids, title):
     for i in range(centroids.shape[0]):
@@ -70,7 +70,7 @@ def plot_soft_clusters(X, responsibilities, centroids, title):
     plt.ylabel('Feature 2')
     plt.title(title)
     plt.legend()
-    # plt.show()
+    plt.show()
 
 def calculate_clustering_accuracy(y_true, y_pred):
     # confusion matrix
@@ -84,7 +84,7 @@ def calculate_clustering_accuracy(y_true, y_pred):
     accuracy = confusion_matrix[row_ind, col_ind].sum() / len(y_true)
     return accuracy
 
-# todo: results optimization and visualization
+# todo: nonlinear autoencoder optimization and binary classification check
 if __name__ == '__main__':
 
     file_path = './Final_Project/seeds_dataset.txt'
@@ -140,19 +140,20 @@ if __name__ == '__main__':
     # plt.show()
 
 # Non-linear Autoencoder
-    hidden_dim = 16
+    hidden_dim = 32
     input_dim = X_train.shape[1]
     encoding_dim = 2
-    nonlinear_autoencoder = NonLinearAutoencoder(input_dim, encoding_dim, hidden_dim, learning_rate=0.001, epochs=8000)
+    nonlinear_autoencoder = NonLinearAutoencoder(input_dim, encoding_dim, hidden_dim, learning_rate=0.01, epochs=8000)
     nonlinear_autoencoder.fit(X_train)
     X_encoded_nonlinear = nonlinear_autoencoder.encode(X_train)
 
     # visualize non-linear autoencoder
+    plt.figure()
     plt.scatter(X_encoded_nonlinear[:, 0], X_encoded_nonlinear[:, 1], c=y_train)
     plt.xlabel('Encoded Feature 1')
     plt.ylabel('Encoded Feature 2')
     plt.title('Non-linear Autoencoder of Seeds Dataset')
-    # plt.show()
+    plt.show()
 
 # Clustering with Reduced Dimensions
     # Apply K-Means++ and Soft K-Means on PCA reduced data
@@ -203,7 +204,7 @@ if __name__ == '__main__':
     # evaluate MLP
     y_pred = mlp.predict(X_test)
     accuracy = np.mean(y_pred == y_test)
-    print(f'MLP Accuracy: {accuracy}')
+    print(f'MLP for Multi-class Classification Accuracy: {accuracy}')
 
 # Binary Classification
     # remoce the data with label 2
@@ -218,14 +219,15 @@ if __name__ == '__main__':
     y_test_binary = np.where(y_test_binary == 1, 1, -1)
 
     # train and evaluate MLP
-    encoder = OneHotEncoder(sparse_output=False)
-    y_train_binary_onehot = encoder.fit_transform(y_train_binary.reshape(-1, 1))
-    y_test_binary_onehot = encoder.transform(y_test_binary.reshape(-1, 1))
+    encoder1 = OneHotEncoder(sparse_output=False)
+    y_train_binary_onehot = encoder1.fit_transform(y_train_binary.reshape(-1, 1))
+    y_test_binary_onehot = encoder1.transform(y_test_binary.reshape(-1, 1))
     n_features = X_train_binary.shape[1]
     n_hidden = 16
-    mlp = MLP(n_features, n_hidden, 2, learning_rate=0.01, epochs=1000)
+    n_classes = len(np.unique(y_train_binary))
+    mlp = MLP(n_features, n_hidden, n_classes, learning_rate=0.01, epochs=10000)
     mlp.fit(X_train_binary, y_train_binary_onehot)
-    y_pred_mlp = mlp.predict(X_test_binary)
+    y_pred_mlp = mlp.predict_binary(X_test_binary)
     accuracy_mlp = np.mean(y_pred_mlp == y_test_binary)
     print(f'MLP Accuracy: {accuracy_mlp}')
 

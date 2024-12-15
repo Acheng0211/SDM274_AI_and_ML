@@ -75,8 +75,8 @@ class NonLinearAutoencoder1:
             self.biases['hidden_encoding'] += self.learning_rate * np.sum(d_hidden_encoding, axis=0, keepdims=True)
             self.weights['encoder_hidden'] += self.learning_rate * np.dot(X.T, d_encoder_hidden)
             self.biases['encoder_hidden'] += self.learning_rate * np.sum(d_encoder_hidden, axis=0, keepdims=True)
-            # if epoch % 100 == 0:
-            #     print(f'Epoch {epoch}, Loss: {loss}')
+            if epoch % 100 == 0:
+                print(f'Epoch {epoch}, Loss: {loss}')
 
     def encode(self, X):
         hidden = self.relu(np.dot(X, self.weights['encoder_hidden']) + self.biases['encoder_hidden'])
@@ -141,8 +141,8 @@ class NonLinearAutoencoder:
             self.weights['encoder_hidden'] += self.learning_rate * np.dot(X.T, d_encoder_hidden)
             self.biases['encoder_hidden'] += self.learning_rate * np.sum(d_encoder_hidden, axis=0, keepdims=True)
             
-            # if epoch % 100 == 0:
-            #     print(f'Epoch {epoch}, Loss: {loss}')
+            if epoch % 100 == 0:
+                print(f'Epoch {epoch}, Loss: {loss}')
 
     def encode(self, X):
         hidden = self.sigmoid(np.dot(X, self.weights['encoder_hidden']) + self.biases['encoder_hidden'])
@@ -205,8 +205,8 @@ class MLP:
             self.weights_input_hidden -= self.learning_rate * np.dot(X.T, error_hidden)
             self.bias_hidden -= self.learning_rate * np.sum(error_hidden, axis=0, keepdims=True)
 
-            # if epoch % 100 == 0:
-            #     print(f'Epoch {epoch}, Loss: {loss}')
+            if epoch % 100 == 0:
+                print(f'Epoch {epoch}, Loss: {loss}')
 
     def predict(self, X):
         hidden_input = np.dot(X, self.weights_input_hidden) + self.bias_hidden
@@ -214,6 +214,15 @@ class MLP:
         final_input = np.dot(hidden_output, self.weights_hidden_output) + self.bias_output
         final_output = self.softmax(final_input)
         return np.argmax(final_output, axis=1) + 1
+    
+    def predict_binary(self, X):
+        hidden_input = np.dot(X, self.weights_input_hidden) + self.bias_hidden
+        hidden_output = self.sigmoid(hidden_input)
+        final_input = np.dot(hidden_output, self.weights_hidden_output) + self.bias_output
+        final_output = self.softmax(final_input)
+        predictions = np.argmax(final_output, axis=1)
+        predictions = np.where(predictions == 0, -1, 1)
+        return predictions
 
 class SVM:
     def __init__(self, learning_rate=0.001, lambda_param=0.01, n_iters=1000):
