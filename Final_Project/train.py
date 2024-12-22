@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 import utils
@@ -59,6 +60,7 @@ def plot_clusters(X, clusters, centroids, title):
     plt.ylabel('Feature 2')
     plt.title(title)
     plt.legend()
+    plt.savefig(os.path.join('./Final_Project/output', f'{title}.png'))
     plt.show()
 
 def plot_soft_clusters(X, responsibilities, centroids, title):
@@ -70,6 +72,7 @@ def plot_soft_clusters(X, responsibilities, centroids, title):
     plt.ylabel('Feature 2')
     plt.title(title)
     plt.legend()
+    plt.savefig(os.path.join('./Final_Project/output', f'{title}.png'))
     plt.show()
 
 def calculate_clustering_accuracy(y_true, y_pred):
@@ -103,7 +106,8 @@ if __name__ == '__main__':
     plt.ylabel('Feature 2')
     plt.title('K-Means++ Clustering')
     plt.legend()
-    # plt.show()
+    plt.savefig(os.path.join('./Final_Project/output', f'K-Means++_Clustering.png'))
+    plt.show()
 
     y_pred_kmeans = np.concatenate([[i] * len(cluster) for i, cluster in enumerate(clusters)])
     accuracy_kmeans = calculate_clustering_accuracy(y_train, y_pred_kmeans)
@@ -122,7 +126,8 @@ if __name__ == '__main__':
     plt.ylabel('Feature 2')
     plt.title('Soft K-Means Clustering')
     plt.legend()
-    # plt.show()
+    plt.savefig(os.path.join('./Final_Project/output', f'Soft_K-Means_Clustering.png'))
+    plt.show()
 
     y_pred_soft_kmeans = np.argmax(responsibilities, axis=1)
     accuracy_soft_kmeans = calculate_clustering_accuracy(y_train, y_pred_soft_kmeans)
@@ -137,7 +142,8 @@ if __name__ == '__main__':
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
     plt.title('PCA of Seeds Dataset')
-    # plt.show()
+    plt.savefig(os.path.join('./Final_Project/output', f'PCA.png'))
+    plt.show()
 
 # Non-linear Autoencoder
     hidden_dim = 32
@@ -153,7 +159,10 @@ if __name__ == '__main__':
     plt.xlabel('Encoded Feature 1')
     plt.ylabel('Encoded Feature 2')
     plt.title('Non-linear Autoencoder of Seeds Dataset')
+    plt.savefig(os.path.join('./Final_Project/output', f'Non-linear_Autoencoder.png'))
     plt.show()
+
+    utils.plot_loss(nonlinear_autoencoder.losses, nonlinear_autoencoder.name)
 
 # Clustering with Reduced Dimensions
     # Apply K-Means++ and Soft K-Means on PCA reduced data
@@ -206,6 +215,8 @@ if __name__ == '__main__':
     accuracy = np.mean(y_pred == y_test)
     print(f'MLP for Multi-class Classification Accuracy: {accuracy}')
 
+    utils.plot_loss(mlp.losses, mlp.name)
+
 # Binary Classification
     # remoce the data with label 2
     binary_mask = y_train != 2
@@ -230,6 +241,7 @@ if __name__ == '__main__':
     y_pred_mlp = mlp.predict_binary(X_test_binary)
     accuracy_mlp = np.mean(y_pred_mlp == y_test_binary)
     print(f'MLP Accuracy: {accuracy_mlp}')
+    utils.plot_loss(mlp.losses, mlp.name, remarks='_binary_')
 
     # train and evaluate SVM
     svm = SVM(learning_rate=0.001, lambda_param=0.01, n_iters=1000)
@@ -237,6 +249,7 @@ if __name__ == '__main__':
     y_pred_svm = svm.predict(X_test_binary)
     accuracy_svm = np.mean(y_pred_svm == y_test_binary)
     print(f'SVM Accuracy: {accuracy_svm}')
+    utils.plot_loss(svm.losses, svm.name, remarks='_binary_')
 
     # train and evaluate SVM with Gaussian Kernel
     svm_gaussian = SVM_Gaussian(learning_rate=0.001, lambda_param=0.01, n_iters=1000, gamma=0.1)
@@ -244,10 +257,25 @@ if __name__ == '__main__':
     y_pred_svm_gaussian = svm_gaussian.predict(X_test_binary)
     accuracy_svm_gaussian = np.mean(y_pred_svm_gaussian == y_test_binary)
     print(f'SVM with Gaussian Kernel Accuracy: {accuracy_svm_gaussian}')
+    # utils.plot_loss(svm_gaussian.losses, svm_gaussian.name, remarks='_binary_')
 
     # train and evaluate AdaBoost
     adaboost = AdaBoost(n_estimators=50, learning_rate=1.0)
     adaboost.fit(X_train_binary, y_train_binary)
     y_pred_adaboost = adaboost.predict(X_test_binary)
     accuracy_adaboost = np.mean(y_pred_adaboost == y_test_binary)
+    print(f'AdaBoost Accuracy: {accuracy_adaboost}')
+    # utils.plot_loss(adaboost.losses, adaboost.name, remarks='_binary_')
+
+# print all the accuracies
+    print(f'K-Means Clustering Accuracy: {accuracy_kmeans}')
+    print(f'Soft K-Means Clustering Accuracy: {accuracy_soft_kmeans}')
+    print(f'K-Means Clustering with PCA Reduced Dimensions Accuracy: {accuracy_clusters_pca_kmeans}')
+    print(f'Soft K-Means Clustering with PCA Reduced Dimensions Accuracy: {accuracy_pca_soft_kmeans}')
+    print(f'K-Means Clustering with Nonlinear Autoencoder Reduced Dimensions Accuracy: {accuracy_clusters_nonlinear_kmeans}')
+    print(f'Soft K-Means Clustering with Nonlinear Autoencoder Reduced Dimensions Accuracy: {accuracy_nonlinear_soft_kmeans}')
+    print(f'MLP for Multi-class Classification Accuracy: {accuracy}')
+    print(f'MLP Accuracy: {accuracy_mlp}')
+    print(f'SVM Accuracy: {accuracy_svm}')
+    print(f'SVM with Gaussian Kernel Accuracy: {accuracy_svm_gaussian}')
     print(f'AdaBoost Accuracy: {accuracy_adaboost}')

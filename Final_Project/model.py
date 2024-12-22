@@ -9,6 +9,7 @@ class PCA:
         self.n_components = n_components
         self.components = None
         self.mean = None
+        self.name = 'PCA'
 
     def fit(self, X):
         self.mean = np.mean(X, axis=0)
@@ -48,6 +49,7 @@ class NonLinearAutoencoder1:
             'encoding_hidden': np.zeros((1, hidden_dim)),
             'hidden_decoder': np.zeros((1, input_dim))
         }
+        self.losses = []
 
     def relu(self, x):
         return np.maximum(0, x)
@@ -62,6 +64,7 @@ class NonLinearAutoencoder1:
             hidden_decoded = self.relu(np.dot(encoded, self.weights['encoding_hidden']) + self.biases['encoding_hidden'])
             decoded = self.relu(np.dot(hidden_decoded, self.weights['hidden_decoder']) + self.biases['hidden_decoder'])
             loss = np.mean((X - decoded) ** 2)
+            self.losses.append(loss)
             error = X - decoded
             d_hidden_decoder = error * self.relu_derivative(decoded)
             d_encoding_hidden = np.dot(d_hidden_decoder, self.weights['hidden_decoder'].T) * self.relu_derivative(hidden_decoded)
@@ -110,6 +113,8 @@ class NonLinearAutoencoder:
             'encoding_hidden': np.zeros((1, hidden_dim)),
             'hidden_decoder': np.zeros((1, input_dim))
         }
+        self.losses = []
+        self.name = 'NonLinearAutoencoder'
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -125,6 +130,7 @@ class NonLinearAutoencoder:
             decoded = self.sigmoid(np.dot(hidden_decoded, self.weights['hidden_decoder']) + self.biases['hidden_decoder'])
             
             loss = np.mean((X - decoded) ** 2)
+            self.losses.append(loss)
             
             error = X - decoded
             d_hidden_decoder = error * self.sigmoid_derivative(decoded)
@@ -168,6 +174,8 @@ class MLP:
         self.weights_hidden_output = np.random.randn(n_hidden, n_classes)
         self.bias_hidden = np.zeros((1, n_hidden))
         self.bias_output = np.zeros((1, n_classes))
+        self.losses = []
+        self.name = 'MLP'
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -194,6 +202,7 @@ class MLP:
             # 计算损失
             # loss = -np.mean(y * np.log(final_output + 1e-15))
             loss = self._cross_entropy_loss(y, final_output)
+            self.losses.append(loss)
 
             # 反向传播
             error_output = final_output - y
@@ -231,6 +240,8 @@ class SVM:
         self.n_iters = n_iters
         self.w = None
         self.b = None
+        self.losses = []
+        self.name = 'SVM'
 
     def fit(self, X, y):
         n_samples, n_features = X.shape
@@ -238,7 +249,8 @@ class SVM:
         self.w = np.zeros(n_features)
         self.b = 0
 
-        for _ in range(self.n_iters):
+        for epoch in range(self.n_iters):
+            loss = 0
             for idx, x_i in enumerate(X):
                 condition = y_[idx] * (np.dot(x_i, self.w) - self.b) >= 1
                 if condition:
@@ -246,6 +258,11 @@ class SVM:
                 else:
                     self.w -= self.learning_rate * (2 * self.lambda_param * self.w - np.dot(x_i, y_[idx]))
                     self.b -= self.learning_rate * y_[idx]
+                    loss += 1 - y_[idx] * (np.dot(x_i, self.w) - self.b)
+                if epoch % 100 == 0:
+                    print(f'Epoch {epoch}, Loss: {loss}')
+            self.losses.append(loss / n_samples)
+
 
     def predict(self, X):
         approx = np.dot(X, self.w) - self.b
@@ -261,6 +278,8 @@ class SVM_Gaussian:
         self.b = None
         self.X = None
         self.y = None
+        self.losses = []
+        self.name = 'SVM_Gaussian'
 
     def rbf_kernel(self, X1, X2):
         # return np.exp(-self.gamma * np.linalg.norm(X1[:, np.newaxis] - X2, axis=2) ** 2)
@@ -274,10 +293,15 @@ class SVM_Gaussian:
         self.y = np.where(y <= 0, -1, 1)
 
         for _ in range(self.n_iters):
+            loss = 0
             for i in range(n_samples):
                 if self.y[i] * (np.sum(self.alpha * self.y * self.rbf_kernel(self.X, self.X[i:i+1])) + self.b) < 1:
                     self.alpha[i] += self.learning_rate * (1 - self.y[i] * (np.sum(self.alpha * self.y * self.rbf_kernel(self.X, self.X[i:i+1])) + self.b))
                     self.b += self.learning_rate * self.y[i]
+                    loss += 1 - self.y[i] * (np.sum(self.alpha * self.y * self.rbf_kernel(self.X, self.X[i:i+1])) + self.b)
+                # if epoch % 100 == 0:
+                #     print(f'Epoch {epoch}, Loss: {loss}')
+            self.losses.append(loss / n_samples)
 
     def predict(self, X):
         y_pred = np.sum(self.alpha[:, np.newaxis] * self.y[:, np.newaxis] * self.rbf_kernel(self.X, X), axis=0) + self.b
@@ -289,6 +313,8 @@ class AdaBoost:
         self.learning_rate = learning_rate
         self.alphas = []
         self.models = []
+        self.losses = []
+        self.name = 'AdaBoost'
 
     def fit(self, X, y):
         n_samples, n_features = X.shape
@@ -305,8 +331,12 @@ class AdaBoost:
             w *= np.exp(alpha * (y != y_pred))
             w /= np.sum(w)
 
+            # if epoch % 100 == 0:
+            #         print(f'Epoch {epoch}, Loss: {error}')
+
             self.alphas.append(alpha)
             self.models.append(model)
+            self.losses.append(error)
 
     def predict(self, X):
         model_preds = np.array([alpha * model.predict(X) for alpha, model in zip(self.alphas, self.models)])

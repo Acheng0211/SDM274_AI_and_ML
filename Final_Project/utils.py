@@ -1,7 +1,9 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 def load_data(file_path):
     data = pd.read_csv(file_path, delimiter='\s+', header=None) # delimiter='\s+' for space separated values
@@ -18,3 +20,11 @@ def load_data(file_path):
 
 def reconstruction_error(X, X_reconstructed):
     return np.mean((X[:,:X_reconstructed.shape[1]] - X_reconstructed) ** 2)
+
+def plot_loss(loss, model_name, remarks='_'):
+    plt.plot(loss)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title(f'{model_name}{remarks}loss')
+    plt.savefig(os.path.join('./Final_Project/output', f'{model_name}{remarks}loss.png'))
+    plt.show()
