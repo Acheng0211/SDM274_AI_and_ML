@@ -87,9 +87,7 @@ def calculate_clustering_accuracy(y_true, y_pred):
     accuracy = confusion_matrix[row_ind, col_ind].sum() / len(y_true)
     return accuracy
 
-# todo: nonlinear autoencoder optimization and binary classification check
 if __name__ == '__main__':
-
     file_path = './Final_Project/seeds_dataset.txt'
     X_train, X_test, y_train, y_test = utils.load_data(file_path)
 
