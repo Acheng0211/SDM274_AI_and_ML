@@ -1,18 +1,15 @@
 # Linear Regression 
 <div align="right">noted by Acheng0211(Guojing Huang, SUSTech)</div>
 
-- [What is Regression?](#1-what-is-regression)
-- [Linear Regression model](#2-linear-regression-model)
-- [Loss Function](#3-loss-function)
-- [Optimization](#4-optimization)
-    - [Least square solution](#41-least-square-solution)
-    - [Gradient decent](#42-gradient-decent)
-- [Generalization](#5-generalization)
-- [Regularization](#6-regularization)
-- [Normalization](#7-normalization)
-  - [Min-Max normalization](#71-min-max-normalization)
-  - [Mean normalization](#72-mean-normalization)
-- [Summary](#summary)
+- [Linear Regression](#linear-regression)
+    - [**1.** What is Regression?](#1-what-is-regression)
+    - [**2.** Linear Regression model](#2-linear-regression-model)
+    - [**3.** Loss Function](#3-loss-function)
+    - [**4.** Optimization](#4-optimization)
+    - [**5.** Generalization](#5-generalization)
+    - [**6.** Regularization](#6-regularization)
+    - [**7.** Normalization](#7-normalization)
+    - [Summary](#summary)
 ___
 
 
@@ -117,7 +114,7 @@ Standard <font color="red">loss/cost/objective</font> function measures the <fon
 [back to the top](#linear-regression)
 
 ###  <big>Summary</big>
-- Data fits: linear regressio model may not be the best selected model, sometimes underfit or overfit.
+- Data fits: linear regression model may not be the best selected model, sometimes underfit or overfit.
 - One method of assessing fit: test **generalization** = model's ability to predict the held out data
 - **Optimization** is essential: stochastic and batch iterative approaches; analystic when available 
 
