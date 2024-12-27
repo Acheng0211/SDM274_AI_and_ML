@@ -14,6 +14,16 @@ ___
   - [k-Nearest Neighbors(knn)](/HA-06_kNN/knn.md)
 - **Decision Tree**
   - [Decision Tree](/HA-07_Decision_Tree/DT.md)
+- **Multi-class classification**
+  - [Multi-class classification](/HA-08_Multi-class_classification/mc.md)
+- **Principal Components Analysis**
+  - [PCA](/HA-09_Dimensionality_Reduction_and_Autoencoders/pca.md)
+- **Clustering**
+  - [Clustering](/HA-09_Dimensionality_Reduction_and_Autoencoders/Clustering.md)
+- **Support Vector Machine**
+  - [SVM](/HA-09_Dimensionality_Reduction_and_Autoencoders/SVM.md)
+- **Ensemble Methods**
+  - [EM](/HA-09_Dimensionality_Reduction_and_Autoencoders/em.md) 
 
 
   ___
