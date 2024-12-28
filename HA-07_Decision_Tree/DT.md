@@ -80,5 +80,4 @@ ___
   - Sensitive to scales of attributes
   - Distances are less meaningful in high dimensions
   - Scales linearly with number of examples
-  - 
 [back to the top](#nearest-neighbors)
