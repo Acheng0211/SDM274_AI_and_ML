@@ -68,7 +68,8 @@ $$
 
 - Two views/derivations:
     - Maximize variance (scatter of green points)
-    - inimize error (red-green distance per datapoint)
+    - minimize error (red-green distance per datapoint)
+  
 [back to the top](#principal-components-analysis-pca)
 
 ### **4.** <big>Minimizing Reconstruction Error</big>

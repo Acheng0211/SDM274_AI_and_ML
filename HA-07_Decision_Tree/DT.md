@@ -2,82 +2,107 @@
 <div align="right">noted by Acheng0211(Guojing Huang, SUSTech)</div>
 
 - [Decision Tree](#decision-tree)
-    - [**1.** Non-parametric Models](#1-non-parametric-models)
-    - [**2.** Nearest Neighbors](#2-nearest-neighbors)
-    - [**3.** $k$-Nearest Neighbors](#3-k-nearest-neighbors)
-    - [**4.** KD Tree](#4-kd-tree)
-    - [**5.** Summary](#5-summary)
+    - [**1.** Introduction](#1-introduction)
+    - [**2.** Classification \& Regression](#2-classification--regression)
+    - [**3.** Learning Decision Trees](#3-learning-decision-trees)
+    - [**4.** Decision Tree Construction Algorithm](#4-decision-tree-construction-algorithm)
+    - [**5.** Selecting the right threshold](#5-selecting-the-right-threshold)
+    - [**6.** Summary](#6-summary)
 ___
 
 
-### **1.** <big>Non-parametric Models</big>
-- Classification is intrinsically **non-linear**
+### **1.** <big>Introduction</big>
+- Internal nodes test attributes
+- Branching is determined by attribute value
+- Leaf nodes are outputs (class assignments)
+- Procedure；
+  - Choose an attribute on which to descend ateach level
+  - Condition on earlier (higher) choices
+  - Generally, restrict only one dimension at a time
+  - Declare an output value when you get to the bottom
 
-[back to the top](#nearest-neighbors)
+[back to the top](#decision-tree)
 
-### **2.** <big>Nearest Neighbors</big>
-- Training example in Euclidean space: $x \in R^d$
-- Distance typically defined to be Euclidean:$${\|x^{(a)} - x^{(b)}\|}_2 = \sqrt{\displaystyle \sum^d_{j=1}(x^{(a)}_j - x^{(b)}_j)^2}$$
-- Decision boundaries
-    - NN does not explicitly compute decision boundaries but can be inferred
-    - **Voronoi diagram**
+### **2.** <big>Classification & Regression</big>
+- Each path from root to a leaf defines a region \( R_m \) of input space. Let \( \{(x^{(m_1)}, t^{(m_1)}), \ldots, (x^{(m_k)}, t^{(m_k)})\} \) be the training examples that fall into \( R_m \).
+- Classification Tree:
+  - Discrete Output
+  - Leaf value \( y^m \) typically set to the most common value in \( [t^{(m_1)}, \ldots, t^{(m_k)}] \)
+- Regression Tree:
+  - Continuous Output
+  - Leaf value \( y^m \) typically set to the mean value in \( [t^{(m_1)}, \ldots, t^{(m_k)}] \)
+- different type of input-and-output case:
+  - Discrete: DT can express any function of the input attributes
+  - Continuous: can approximate any function arbitrarily closely
 
-[back to the top](#nearest-neighbors)
+[back to the top](#decision-tree)
 
-### **3.** <big>$k$-Nearest Neighbors</big>
-- smooth when disturbed by mis-labeled data("class noise")
-- Algorithm
-  - Find $k$ examples {**x**$^{(i)}, t^{(i)}$} close to the test instance **x**
-  - Classification output is majority class
-  $$y = arg \displaystyle max_{t^{(z)}} \sum^k_{r=1}\delta(t^{(z)}, t^{(r)})$$
-- Rules to choose $k$
-  - larger $k$ may lead to better performance
-  - but too large $k$ may be far away from the quety
-  - use cross-validation to find $k$
-  - Rule of tumb is $k < \sqrt{n}$, where $n$ is the number of training examples
-- Issues & Remedies
-  - some attributes (coordinates of $x$) with larger ranges will be treated as more important, which nedd to **nomalize scale**: [0,1] or $(x_j - m)/\sigma$
-  - Irrelevant, correlated attributes add noise to distance measure
-    - eliminate some attributes
-    - vary and possibly adapt weight of attributes
-  - Non-metric attributes(symbols)
-    - Hamming distance
-  - Expensive at test time: To find one nearest neighbor of a query point $x$, we must compute the distance to all N training examples. **Complexity: O(kdN) for $k$-NN**
-    - Use subset of dimensions
-    - Pre-sort training examples into fast data structures (e.g., kd-treees)
-    - Compute only an approximate distance (e.g., LSH)
-    - Remove redundant data (e.g., condensing).
-  - Storage Requirements: Must store all training data
-    - Remove redundant data (e.g., condensing).
-    - Pre-sorting often increases the storage requirements
-  - High Dimensional Data: "Curse of Dimensionality"
-    - Required amount of training data increases exponentially with diimension
-    - Computational cost also increases
+### **3.** <big>Learning Decision Trees</big>
+- Resort to a greedy heuristic: Start from an empty decision tree $\rightarrow$ Split on next best attribute $\rightarrow$ Recurse
+- Choosing a good attribute
+  - Deterministic: good (all are true or false, just one class in the leaf)
+  - Uniform distribution: bad (all classes in leaf equally probable)
+- Quantifying Uncertainty
+  - Entropy $H$: $\displaystyle H(X)=-\sum_{x \in X} p(x)log_2p(x)$
+    - "High Entropy
+      - Variable has a uniform like distribution
+      - Flat histogram
+      - Values sampled from it are less predictable
+    - "Low Entropy"
+      - Distribution of variable has many peaks and valleys
+      - Histogram has many lows and highs
+      - Values sampled from it are more predictable
+  - Conditonal Entropy: $\displaystyle H(Y \mid X) = \sum_{x \in X} p(x) H(Y \mid X = x) = - \sum_{x \in X} \sum_{y \in Y} p(x, y) \log_2 p(y \mid x)$
+    - H is always non-negative
+    - **Chain rule**: $ H(X, Y) = H(X|Y) + H(Y) = H(Y|X) + H(X) $
+    - If \( X \) and \( Y \) are independent, then \( X \) doesn't tell us anything about \( Y \): $ H(Y|X) = H(Y) $
+    - But \( Y \) tells us everything about \( Y \): $ H(Y|Y) = 0 $
+    - By knowing \( X \), we can only decrease uncertainty about \( Y \): $ H(Y|X) \leq H(Y) $
+  - Information gain (in $Y$ due to $X$): $IG(Y|X) = H(Y) - H(Y|X)$
+    - If $X$ is completely uninformative about $Y$: $IG(Y|X)=0$
+    - If $X$ is completely informative about $Y$: $IG(Y|X)=H(Y)$
 
-[back to the top](#nearest-neighbors)
+[back to the top](#decision-tree)
 
-### **4.** <big>KD Tree</big>
-- KD tree(*K*-Dimensional Tree)
-- Definition
-  - Node: Each node in a KD tree represents a point in K-dimensional space
-  - Axis Selection: During the construction of the tree, a dimension (axis) is
-  chosen each time and points are partitioned based on that dimernsion's value.
-  - Partitioning: A value is chosen along the selected axis to spplit the points into two parts: one part with points having values less thain the chosen value on that axis, and the other part with points having valuesgreater than or equal to the chosen value.
-  - Recursive Construction: The same process is applied recursively to each subset until each subset contains only one point or no points.
-  1. Choose a dimension (axis).
-  2. Sort the points along that dimension.
-  3. Select the median as the partition point, dividing the pointsinto two groups.
-  4. Recursively apply the above steps to each subset until eaclh subset contains
-  only one point or no points.
+### **4.** <big>Decision Tree Construction Algorithm</big>
+- Simple, greedy, recursive approach, builds up tree node-by-node
+  1. pick an attribute to split at a non-terminal node
+  2. split examples into groups based on attribute value
+  3. for each group:
+    - if no examples - return majority from parent
+    - else if all examples in same class - return class
+    - else loop to step i.
+- A good Tree
+  - Not too small: need to handle important but possibly subtle distinctions indata
+  - Not too big:
+    - Computational efficiency (avoid redundant, spurious attributes)。
+    - Avoid over-ftting training examples
+  - Occam's Razor: fnd the simplest hypothesis (smallest tree) that fits theobservations
+  - Inductive bias: small trees with informative nodes near the root
 
-[back to the top](#nearest-neighbors)
+[back to the top](#decision-tree)
 
-### **5.** <big>Summary</big>
-- $k$-NN naturally forms complex decision boundaries and adapts to data density
-- $k$-NN typically works well with lots of samples
-- Problems:
-  - Sensitive to class noise
-  - Sensitive to scales of attributes
-  - Distances are less meaningful in high dimensions
-  - Scales linearly with number of examples
-[back to the top](#nearest-neighbors)
+### **5.** <big>Selecting the right threshold</big>
+- Step 1: Sort the Data
+  - First, sort the data based on the values of the continuous attribute.
+- Step 2: Calculate All Possible Thresholds
+  - For the sorted data, thresholds can be taken as the midpoint between any twoconsecutive values. For example, if the sorted data is [1,2, 3, 4, 5], then thepossible thresholds are 1.5, 2.5, 3.5, and 4.5.
+- Step 3: Calculate the Information Gain for Each Threshold 
+  - For each possible threshold, split the data into two parts: values less than orequal to the threshold and values greater than the threshold. Then, calculate theInformation Gain for each split.
+- Step 4: Choose the Threshold with Maximum Information Gain
+  - From all possible thresholds, select the one with the maximum Information Gainas the fnal threshold.
+
+[back to the top](#decision-tree)
+
+### **6.** <big>Summary</big>
+- Comparison to $k$-NN
+  - $k$-NN:
+    - Decision boundaries: piece-wise linear
+    - Test complexity: non-parametric, few parameters besides training examples
+  - Decision Trees:
+    - Decision boundaries: axis-aligned, tree structured
+    - Test complexity: attributes and splits
+- Can express any Boolean function, but most useful when function dependscritically on few attributes
+- Bad on:parity, majority functions; also not well-suited to continuousattributes 
+
+[back to the top](#decision-tree)

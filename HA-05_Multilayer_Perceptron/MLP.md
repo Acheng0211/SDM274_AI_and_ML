@@ -1,10 +1,11 @@
 # Multi-layer Perceptron 
 <div align="right">noted by Acheng0211(Guojing Huang, SUSTech)</div>
 
-- [Multy-layer Perceptron](#1-multy-layer-perceptron)
-- [Forward Propagation](#2-forward-propagation)
-- [Backward Propagation](#3-backward-propagation)
-- [Summary](#summary)
+- [Multi-layer Perceptron](#multi-layer-perceptron)
+    - [**1.** Multy-layer Perceptron](#1-multy-layer-perceptron)
+    - [**2.** Forward Propagation](#2-forward-propagation)
+    - [**3.** Backward Propagation](#3-backward-propagation)
+    - [**4.** Summary](#4-summary)
 ___
 
 
@@ -78,9 +79,7 @@ ___
         1. Forward propagation:
         $$u_j = v_{j0} + \displaystyle \sum^D_{i=1}v_{ji}x_i, h_j = f(u_j), z_k = w_{k0} + \displaystyle \sum^D_{j=1}w_{kj}h_j, o_k = g(z_k)$$
         2. Backward propagation:
-        $$\delta^{o}_k = \frac{t_k-o_k}{o_k(1-o_k)}, \delta^{z}_k = \delta^{o}_k\cdot o_k(1-o_k),\frac{\partial E}{\partial w_{kj}} = \delta^{z}_k\cdot h_j$$
-        $$\delta^{h}_j = \displaystyle \sum_k \delta^{z}_kw_{kj}, \delta^{u}_j = \delta^{h}_j\cdot f'(u_j)$$
-        $$\frac{\partial E}{\partial v_{ji}} = \delta^{u}_jx_i$$
+        $$\delta^{o}_k = \frac{t_k-o_k}{o_k(1-o_k)}, \delta^{z}_k = \delta^{o}_k\cdot o_k(1-o_k),\frac{\partial E}{\partial w_{kj}} = \delta^{z}_k\cdot h_j$$ $$\delta^{h}_j = \displaystyle \sum_k \delta^{z}_kw_{kj}, \delta^{u}_j = \delta^{h}_j\cdot f'(u_j)$$ $$\frac{\partial E}{\partial v_{ji}} = \delta^{u}_jx_i$$
     3. matrix form:
     $$\frac{\partial E}{\partial W} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix} \begin{bmatrix} h_1 & h_2 & h_3 & h_4 \end{bmatrix}$$ 
     $$\frac{\partial E}{\partial b_w} = \begin{bmatrix}\delta^z_1 \\ \delta^z_2 \\ \delta^z_3 \end{bmatrix}$$
@@ -96,7 +95,7 @@ ___
     - noise & sampling error
     - to prevent:
         1. model with right capacity: validation set
-        2. limit the numeber of hidden units
+        2. limit the number of hidden units
         3. limit the norm of the weights: weight-decay, improve generalization, smooher $$C = E + \frac{\lambda}{2} \displaystyle \sum_i w^2_i$$ keep weights small unless they have big error derivatives $$\frac{\partial C}{\partial w_i} = \frac{\partial E}{\partial w_i} + \lambda w_i$$
         4. early stopping: start with small weights(hidden unit is in its linear range) and grow(start using non-linear ranges), limited capacity due to limited time for weights to grow big
 

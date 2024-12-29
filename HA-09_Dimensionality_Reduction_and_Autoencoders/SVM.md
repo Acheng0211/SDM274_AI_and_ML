@@ -197,7 +197,7 @@ Q = \left( \begin{bmatrix} t^{(1)} \\ \vdots \\ t^{(N)} \end{bmatrix} \begin{bma
 - Advantages:
   - Kernels allow very flexible hypotheses
   - Poly-time exact optimization methods rather than approximate methods
-  - Soft-margin extensions permits mis-classified examples0
+  - Soft-margin extensions permits mis-classified examples
   - Excellent results (1.1% error rate on handwritten digits vs. LeNet's 0.9%)
 - Disadvantages: must choose kernel parameters
 - Difference between logistic regression and SVMs
